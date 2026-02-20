@@ -143,3 +143,44 @@ def get_instructores_by_supervisor(
         query,
         {"id_supervisor": id_supervisor}
     ).mappings().all()
+
+def get_all_instructores_paginated(
+    db: Session,
+    page: int = 1,
+    size: int = 10
+):
+    try:
+        offset = (page - 1) * size
+
+        query = text("""
+            SELECT
+                id_instructor,
+                tipo_documento,
+                numero_documento,
+                nombres,
+                apellidos,
+                fecha_nacimiento,
+                fecha_expedicion,
+                arl
+            FROM instructor
+            ORDER BY id_instructor
+            LIMIT :limit OFFSET :offset
+        """)
+
+        result = db.execute(
+            query,
+            {
+                "limit": size,
+                "offset": offset
+            }
+        ).mappings().all()
+        return result
+
+    except Exception as e:
+        logger.error(f"Error al obtener instructores paginados: {e}")
+        raise Exception("Error de base de datos al obtener instructores")
+
+def count_instructores(db: Session):
+    query = text("SELECT COUNT(*) as total FROM instructor")
+    result = db.execute(query).mappings().first()
+    return result["total"]
