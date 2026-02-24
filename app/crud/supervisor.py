@@ -19,8 +19,8 @@ def create_supervisor(
 ) -> bool:
     try:
         query = text("""
-            INSERT INTO supervisor (nombre)
-            VALUES (:nombre)
+            INSERT INTO supervisor (nombre, cedula)
+            VALUES (:nombre, :cedula)
         """)
 
         db.execute(query, supervisor.model_dump())

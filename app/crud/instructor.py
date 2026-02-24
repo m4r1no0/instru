@@ -155,6 +155,7 @@ def get_all_instructores_paginated(
         query = text("""
             SELECT
                 id_instructor,
+                id_supervisor,
                 tipo_documento,
                 numero_documento,
                 nombres,

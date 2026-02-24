@@ -7,6 +7,7 @@ from typing import Optional
 # =====================================
 class SupervisorBase(BaseModel):
     nombre: Optional[str] = Field(default=None, max_length=30)
+    cedula: Optional[str] = Field(default=None, max_length=30)
 
 
 # =====================================
@@ -21,6 +22,7 @@ class SupervisorCreate(SupervisorBase):
 # =====================================
 class SupervisorUpdate(BaseModel):
     nombre: Optional[str] = Field(default=None, max_length=30)
+    cedula: Optional[str] = Field(default=None, max_length=30)
 
 
 # =====================================
