@@ -1,24 +1,41 @@
 from datetime import date
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional
 
-class Instructor(BaseModel):
-    id_instructor: int
-    id_supervisor: int
-    tipo_documento:str
-    numero_documento:int
+# 🔹 Campos comunes
+class InstructorBase(BaseModel):
+    tipo_documento: str
+    numero_documento: int  # Ahora es int
     nombres: str = Field(min_length=3, max_length=80)
-    apellidos: str = Field(min_length=7, max_length=15)
-    fecha_nacimiento:date
-    fecha_expedicion:date
-    arl:str
+    apellidos: str = Field(min_length=3, max_length=50)
+    fecha_nacimiento: Optional[date] = None
+    fecha_expedicion: Optional[date] = None
+    arl: Optional[str] = None
+    id_supervisor: Optional[int] = None  # Opcional
 
-class InstructorCreate(Instructor):
+# 🔹 Para crear (NO incluye id)
+class InstructorCreate(InstructorBase):
     pass
 
-class InstructorUpdate(Instructor):
-    pass
+# 🔹 Para actualizar (campos opcionales)
+class InstructorUpdate(BaseModel):
+    tipo_documento: Optional[str] = None
+    numero_documento: Optional[int] = None
+    nombres: Optional[str] = None
+    apellidos: Optional[str] = None
+    fecha_nacimiento: Optional[date] = None
+    fecha_expedicion: Optional[date] = None
+    arl: Optional[str] = None
+    id_supervisor: Optional[int] = None
 
-class InstructorOut(Instructor):
-    id_instructor:int
-    nombre:str
+# 🔹 Para devolver al frontend (SÍ incluye id)
+class InstructorOut(BaseModel):
+    id_instructor: int
+    tipo_documento: str
+    numero_documento: int
+    nombres: str
+    apellidos: str
+    fecha_nacimiento: Optional[date] = None
+    fecha_expedicion: Optional[date] = None
+    arl: Optional[str] = None
+    id_supervisor: Optional[int] = None

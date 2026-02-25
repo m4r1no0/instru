@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends, Query, HTTPException
+from fastapi import APIRouter, Depends, Query, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import Optional
 
 from core.database import get_db
 from app.router.dependencies import get_current_user
-from app.schemas.instructor import InstructorCreate, InstructorUpdate
+from app.schemas.instructor import InstructorCreate, InstructorOut, InstructorUpdate
 from app.crud.instructor import (
     create_instructor,
     get_user_by_id,
@@ -22,18 +22,12 @@ router = APIRouter()
 # CREAR INSTRUCTOR
 # =====================================================
 
-@router.post("/")
+@router.post("/create", status_code=status.HTTP_201_CREATED)
 def crear_instructor(
     instructor: InstructorCreate,
-    db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user)
+    db: Session = Depends(get_db)
 ):
-    success = create_instructor(db, instructor)
-
-    if not success:
-        raise HTTPException(status_code=400, detail="No se pudo crear el instructor")
-
-    return {"message": "Instructor creado correctamente"}
+    return create_instructor(db, instructor)
 
 # =====================================================
 # OBTENER INSTRUCTOR POR ID

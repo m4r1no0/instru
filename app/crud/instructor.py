@@ -1,3 +1,5 @@
+from fastapi import HTTPException
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from typing import Optional
@@ -9,30 +11,31 @@ from core.security import get_hashed_password
 
 logger = logging.getLogger(__name__)
 
-def create_instructor(db: Session, user: InstructorCreate) -> Optional[bool]:
+def create_instructor(db: Session, instructor: InstructorCreate):
     try:
-        print(user.pass_hash)
-        pass_encrypt = get_hashed_password(user.pass_hash)
-        print(pass_encrypt)
-        user.pass_hash = pass_encrypt
         query = text("""
             INSERT INTO instructor (
                 tipo_documento, numero_documento, nombres,
-                apellido, fecha_nacimiento,
-                fecha_expedicion, arl
+                apellidos, fecha_nacimiento,
+                fecha_expedicion, arl, id_supervisor
             ) VALUES (
                 :tipo_documento, :numero_documento, :nombres,
                 :apellidos, :fecha_nacimiento,
-                :fecha_expedicion, :arl
+                :fecha_expedicion, :arl, :id_supervisor
             )
         """)
-        db.execute(query, user.model_dump())
+
+        db.execute(query, instructor.model_dump())
         db.commit()
-        return True
+
+        return {"message": "Instructor creado correctamente"}
+
     except Exception as e:
         db.rollback()
-        logger.error(f"Error al crear usuario: {e}")
-        raise Exception("Error de base de datos al crear el usuario")
+        raise HTTPException(
+            status_code=400,
+            detail=str(e)
+        )
 
 def get_user_by_email_for_login(db: Session, email: str):
     try:
