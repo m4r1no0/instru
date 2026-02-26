@@ -1,5 +1,5 @@
 from datetime import date
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, Field
 from typing import Optional
 
 # 🔹 Campos comunes

@@ -75,8 +75,8 @@ def update_user_by_id(db: Session, user_id: int, user:InstructorUpdate) -> Optio
         return result.rowcount > 0
     except Exception as e:
         db.rollback()
-        logger.error(f"Error al crear instructor: {e}")
-        raise Exception("Error de base de datos al crear el instructor")
+        print("ERROR REAL:", e)
+        raise
     
 def get_user_by_id(db: Session, id: int):
     try:
