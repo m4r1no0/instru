@@ -79,10 +79,10 @@ def get_all_contratos(db: Session):
         query = text("""
             SELECT *
             FROM contrato
-            ORDER BY fecha_inicio DESC
         """)
 
-        return db.execute(query).mappings().all()
+        result = db.execute(query)
+        return result.mappings().all()
 
     except Exception as e:
         logger.error(f"Error al listar contratos: {e}")
@@ -98,7 +98,6 @@ def get_contratos_by_instructor(db: Session, id_instructor: int):
             SELECT *
             FROM contrato
             WHERE id_instructor = :id_instructor
-            ORDER BY fecha_inicio DESC
         """)
 
         return db.execute(

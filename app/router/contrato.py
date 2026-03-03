@@ -16,11 +16,13 @@ router = APIRouter()
 # ======================================
 # CREAR CONTRATO
 # ======================================
-@router.post(
-    "/",
-    response_model=dict,
-    status_code=status.HTTP_201_CREATED
-)
+@router.get("/")
+def get_all_contratos(
+    db: Session = Depends(get_db)
+):
+    contratos = contrato_crud.get_all_contratos(db)
+    return contratos
+
 def create_contrato(
     contrato: ContratoCreate,
     db: Session = Depends(get_db)

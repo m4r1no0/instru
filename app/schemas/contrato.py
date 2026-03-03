@@ -50,6 +50,3 @@ class ContratoUpdate(BaseModel):
 # =========================================
 class ContratoOut(ContratoBase):
     id_contrato: int
-
-    class Config:
-        from_attributes = True
