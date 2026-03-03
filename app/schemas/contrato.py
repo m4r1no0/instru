@@ -15,8 +15,8 @@ class ContratoBase(BaseModel):
     vigencia: Optional[date] = None
     valor_contrato: Optional[Decimal] = None
     estado: Optional[str] = Field(default=None, max_length=30)
-    cdp: Optional[str] = Field(default=None, max_length=50)
-    crp: Optional[str] = Field(default=None, max_length=50)
+    cdp: Optional[int] 
+    crp: Optional[int] 
     rubro: Optional[str] = Field(default=None, max_length=100)
     dependencia: Optional[str] = Field(default=None, max_length=100)
 

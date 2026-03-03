@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.router import (
     pago, users, auth, instructor, contrato,
     direccion, contacto, proceso, programa,
-    poliza, rol, supervisor, area_formacion
+    poliza, rol, supervisor, area_formacion, informe
 )
 
 app = FastAPI()
@@ -31,6 +31,7 @@ app.include_router(rol.router, prefix="/rol", tags=["rol"])
 app.include_router(contacto.router, prefix="/contacto", tags=["contacto"])
 app.include_router(supervisor.router, prefix="/supervisor", tags=["supervisor"])
 app.include_router(area_formacion.router, prefix="/area_formacion", tags=["area_formacion"])
+app.include_router(informe.router, prefix="/informe", tags=["informes"])
 
 @app.get("/")
 def read_root():
