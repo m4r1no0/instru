@@ -1,10 +1,13 @@
 from pathlib import Path
+import tempfile
+import os 
 from docxtpl import DocxTemplate
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 
+from app.crud import contrato
 from core.database import get_db
 from app.crud.contrato import get_contrato_by_id
 router = APIRouter()
@@ -16,30 +19,31 @@ print(TEMPLATE_PATH)
 print("EXISTE:", TEMPLATE_PATH.exists())
 
 @router.get("/contrato/{id_contrato}")
-def generar_informe_contrato(id_contrato: int, db: Session = Depends(get_db)):
+def generar_informe_contrato(
+    id_contrato: int,
+    db: Session = Depends(get_db)
+):
 
-    contrato = get_contrato_by_id(db, id_contrato)
+    data = contrato.get_contrato_informe(db, id_contrato)
 
-    if not contrato:
+    # 👇 PON EL PRINT AQUÍ
+    print("DATA DEL INFORME:")
+    print(data)
+
+    if not data:
         raise HTTPException(status_code=404, detail="Contrato no encontrado")
 
-    doc = DocxTemplate(str(TEMPLATE_PATH))
+    template_path = os.path.join("app", "templates", "contrato_template.docx")
 
-    contexto = {
-        "nombres": contrato.numero_contrato,
-        "documento": contrato.crp,
-        "fecha_inicio": contrato.cdp,
-        "fecha_fin": contrato.fecha_fin,
-        "valor": contrato.valor_contrato
-    }
+    doc = DocxTemplate(template_path)
 
-    doc.render(contexto)
+    doc.render(data)
 
-    output_path = BASE_DIR / "contrato_generado.docx"
-    doc.save(output_path)
+    tmp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".docx")
+    doc.save(tmp_file.name)
 
     return FileResponse(
-        path=output_path,
-        filename="contrato_generado.docx",
+        tmp_file.name,
+        filename=f"Contrato_{id_contrato}.docx",
         media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     )

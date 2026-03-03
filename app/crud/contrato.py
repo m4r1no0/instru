@@ -169,3 +169,33 @@ def delete_contrato(db: Session, id_contrato: int) -> bool:
         db.rollback()
         logger.error(f"Error al eliminar contrato: {e}")
         raise Exception("Error de base de datos")
+
+def get_contrato_informe(db: Session, id_contrato: int):
+    query = text("""
+        SELECT 
+            co.id_contrato,
+            co.numero_contrato,
+            co.fecha_inicio,
+            co.fecha_fin,
+            co.vigencia,
+            co.valor_contrato,
+            co.estado,
+            co.cdp,
+            co.crp,
+            co.rubro,
+            co.dependencia,
+            ins.nombres,
+            ins.apellidos,
+            ins.numero_documento
+        FROM contrato co
+        JOIN instructor ins 
+            ON ins.id_instructor = co.id_instructor
+        WHERE co.id_contrato = :id_contrato
+    """)
+
+    result = db.execute(
+        query,
+        {"id_contrato": id_contrato}
+    ).mappings().first()
+
+    return dict(result) if result else None
