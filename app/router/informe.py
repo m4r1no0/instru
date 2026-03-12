@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 
 from app.crud import contrato
 from core.database import get_db
-from app.crud.contrato import get_contrato_by_id
+
 router = APIRouter()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
