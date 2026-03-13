@@ -15,24 +15,32 @@ router = APIRouter()
 
 
 # ======================================
-# CREAR
+# LISTAR TODAS LAS DIRECCIONES (DEBE IR PRIMERO)
 # ======================================
-@router.post("/", status_code=status.HTTP_201_CREATED)
-def create_direccion(
-    direccion: DireccionCreate,
+@router.get("/all", response_model=List[DireccionOut])
+def get_all_direcciones(
     db: Session = Depends(get_db)
 ):
-    if not direccion_crud.create_direccion(db, direccion):
-        raise HTTPException(
-            status_code=400,
-            detail="No se pudo crear la dirección"
-        )
-
-    return {"message": "Dirección creada correctamente"}
+    """
+    Obtiene todas las direcciones
+    """
+    direcciones = direccion_crud.get_all_direcciones(db)
+    return direcciones
 
 
 # ======================================
-# OBTENER POR ID
+# LISTAR POR INSTRUCTOR (ESPECÍFICO)
+# ======================================
+@router.get("/instructor/{id_instructor}", response_model=List[DireccionOut])
+def get_direcciones_by_instructor(
+    id_instructor: int,
+    db: Session = Depends(get_db)
+):
+    return direccion_crud.get_direcciones_by_instructor(db, id_instructor)
+
+
+# ======================================
+# OBTENER POR ID (DEBE IR DESPUÉS DE RUTAS ESPECÍFICAS)
 # ======================================
 @router.get("/{id_direccion}", response_model=DireccionOut)
 def get_direccion(
@@ -51,18 +59,20 @@ def get_direccion(
 
 
 # ======================================
-# LISTAR POR INSTRUCTOR
+# CREAR
 # ======================================
-@router.get("/instructor/{id_instructor}",
-            response_model=List[DireccionOut])
-def get_direcciones_by_instructor(
-    id_instructor: int,
+@router.post("/create", status_code=status.HTTP_201_CREATED)
+def create_direccion(
+    direccion: DireccionCreate,
     db: Session = Depends(get_db)
 ):
-    return direccion_crud.get_direcciones_by_instructor(
-        db,
-        id_instructor
-    )
+    if not direccion_crud.create_direccion(db, direccion):
+        raise HTTPException(
+            status_code=400,
+            detail="No se pudo crear la dirección"
+        )
+
+    return {"message": "Dirección creada correctamente"}
 
 
 # ======================================
@@ -74,11 +84,7 @@ def update_direccion(
     direccion: DireccionUpdate,
     db: Session = Depends(get_db)
 ):
-    updated = direccion_crud.update_direccion(
-        db,
-        id_direccion,
-        direccion
-    )
+    updated = direccion_crud.update_direccion(db, id_direccion, direccion)
 
     if not updated:
         raise HTTPException(
@@ -97,10 +103,7 @@ def delete_direccion(
     id_direccion: int,
     db: Session = Depends(get_db)
 ):
-    deleted = direccion_crud.delete_direccion(
-        db,
-        id_direccion
-    )
+    deleted = direccion_crud.delete_direccion(db, id_direccion)
 
     if not deleted:
         raise HTTPException(

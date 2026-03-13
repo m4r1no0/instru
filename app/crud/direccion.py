@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import text
-from typing import List
+from typing import List, Optional
 import logging
 
 from app.schemas.direccion import DireccionCreate, DireccionUpdate
@@ -138,3 +138,35 @@ def delete_direccion(db: Session, id_direccion: int) -> bool:
         db.rollback()
         logger.error(f"Error al eliminar dirección: {e}")
         raise Exception("Error de base de datos")
+
+# ======================================
+# OBTENER TODAS LAS DIRECCIONES
+# ======================================
+def get_all_direcciones(db: Session) -> Optional[List[dict]]:
+    """
+    Obtiene todas las direcciones usando SQL raw
+    
+    Returns:
+        List[dict]: Lista de direcciones o None si hay error
+    """
+    try:
+        query = text("""
+            SELECT id_direccion, id_instructor, municipio, barrio, complemento 
+            FROM direccion
+        """)
+
+        result = db.execute(query).mappings().all()
+        
+        # No hacer commit en SELECT
+        # db.commit()  # ← ELIMINAR ESTO
+        
+        logger.info(f"Se encontraron {len(result)} direcciones")
+        return result
+
+    except Exception as e:
+        # No hacer rollback en SELECT
+        # db.rollback()  # ← ELIMINAR ESTO
+        
+        logger.error(f"Error al cargar direcciones: {e}")
+        # Devolver lista vacía en lugar de lanzar excepción
+        return []

@@ -36,3 +36,4 @@ class DireccionOut(DireccionBase):
 
     class Config:
         from_attributes = True
+
