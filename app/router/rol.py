@@ -11,10 +11,7 @@ from app.schemas.rol import (
 from app.crud import rol as rol_crud
 
 
-router = APIRouter(
-    prefix="/roles",
-    tags=["Roles"]
-)
+router = APIRouter()
 
 
 # =====================================
