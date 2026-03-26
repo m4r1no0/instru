@@ -206,6 +206,7 @@ def get_contrato_instructor(db: Session):
             SELECT 
             ins.nombres,
             ins.apellidos,
+            ins.numero_documento,
             co.numero_contrato,
             co.crp
             FROM instructor ins
