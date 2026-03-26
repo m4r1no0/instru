@@ -6,7 +6,8 @@ from core.database import get_db
 from app.schemas.contrato import (
     ContratoCreate,
     ContratoUpdate,
-    ContratoOut
+    ContratoOut,
+    InstructorContratoOut
 )
 from app.crud import contrato as contrato_crud
 
@@ -36,6 +37,20 @@ def create_contrato(
         )
 
     return {"message": "Contrato creado correctamente"}
+
+
+
+@router.get("/instructores_contratos", response_model=dict)
+def get_contrato_with_instructor(db: Session = Depends(get_db)):
+    try:
+        result = contrato_crud.get_contrato_instructor(db)
+        return {
+            "status": "success",
+            "data": result,
+            "total": len(result)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # ======================================
@@ -140,3 +155,5 @@ def delete_contrato(
         )
 
     return {"message": "Contrato eliminado correctamente"}
+
+

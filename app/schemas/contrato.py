@@ -50,3 +50,10 @@ class ContratoUpdate(BaseModel):
 # =========================================
 class ContratoOut(ContratoBase):
     id_contrato: int
+
+class InstructorContratoOut(BaseModel):
+    """Schema para la consulta que une instructores con sus contratos"""
+    nombres: str = Field(..., description="Nombres del instructor")
+    apellidos: str = Field(..., description="Apellidos del instructor")
+    numero_contrato: Optional[str] = Field(None, description="Número de contrato (puede ser NULL si el instructor no tiene contrato)")
+    crp: Optional[int] = Field(None, description="CRP del contrato (puede ser NULL si el instructor no tiene contrato)")

@@ -200,32 +200,22 @@ def get_contrato_informe(db: Session, id_contrato: int):
 
     return dict(result) if result else None
 
-
-    query = text("""
-        SELECT 
-            co.id_contrato,
-            co.numero_contrato,
-            co.fecha_inicio,
-            co.fecha_fin,
-            co.vigencia,
-            co.valor_contrato,
-            co.estado,
-            co.cdp,
-            co.crp,
-            co.rubro,
-            co.dependencia,
+def get_contrato_instructor(db: Session):
+    try:
+        query = text("""
+            SELECT 
             ins.nombres,
             ins.apellidos,
-            ins.numero_documento
-        FROM contrato co
-        JOIN instructor ins 
-            ON ins.id_instructor = co.id_instructor
-        WHERE co.id_contrato = :id_contrato
-    """)
+            co.numero_contrato,
+            co.crp
+            FROM instructor ins
+            LEFT JOIN contrato co 
+            ON co.id_instructor = ins.id_instructor;
+        """)
 
-    result = db.execute(
-        query,
-        {"id_contrato": id_contrato}
-    ).mappings().first()
+        result = db.execute(query)
+        return [dict(row) for row in result.mappings().all()]
 
-    return dict(result) if result else None
+    except Exception as e:
+        logger.error(f"Error al listar contratos: {e}")
+        raise Exception("Error de base de datos")
