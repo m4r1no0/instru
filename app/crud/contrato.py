@@ -205,6 +205,7 @@ def get_contrato_instructor(db: Session):
         query = text("""
             SELECT 
             ins.nombres,
+            ins.id_instructor,
             ins.apellidos,
             ins.numero_documento,
             co.numero_contrato,

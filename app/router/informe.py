@@ -18,7 +18,7 @@ TEMPLATE_PATH = BASE_DIR / "templates" / "contrato_template.docx"
 print(TEMPLATE_PATH)
 print("EXISTE:", TEMPLATE_PATH.exists())
 
-@router.get("/contrato/{id_contrato}")
+@router.get("/informe/contrato/{id_contrato}")
 def generar_informe_contrato(
     id_contrato: int,
     db: Session = Depends(get_db)

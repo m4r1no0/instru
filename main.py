@@ -31,9 +31,9 @@ app.include_router(rol.router, prefix="/rol", tags=["rol"])
 app.include_router(contacto.router, prefix="/contacto", tags=["contacto"])
 app.include_router(supervisor.router, prefix="/supervisor", tags=["supervisor"])
 app.include_router(area_formacion.router, prefix="/area_formacion", tags=["area_formacion"])
-app.include_router(informe.router, prefix="/informe", tags=["informes"])
-app.include_router(InformeDos.router, prefix="/informe", tags=["informes"])
-app.include_router(informeTres.router, prefix="/informe", tags=["informes"])
+app.include_router(informe.router, tags=["informes"])
+app.include_router(InformeDos.router, tags=["informes"])
+app.include_router(informeTres.router, tags=["informes"])
 
 @app.get("/")
 def read_root():
@@ -41,3 +41,6 @@ def read_root():
         "message": "ok",
         "autor": "Marino A Osorio D"
     }
+print("Rutas disponibles:")
+for route in app.routes:
+    print(f"{route.methods} {route.path}")

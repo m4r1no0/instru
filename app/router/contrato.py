@@ -17,7 +17,7 @@ router = APIRouter()
 # ======================================
 # CREAR CONTRATO
 # ======================================
-@router.get("/")
+@router.get("/create")
 def get_all_contratos(
     db: Session = Depends(get_db)
 ):
