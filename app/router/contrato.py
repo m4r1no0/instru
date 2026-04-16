@@ -17,13 +17,12 @@ router = APIRouter()
 # ======================================
 # CREAR CONTRATO
 # ======================================
-@router.post("/create/id_instructor/{id_instructor}")  # Cambiado a POST
+@router.post("/create")
 def create_contrato(
-    id_instructor: int,  # Extraer de la URL, no del body
     contrato: ContratoCreate,
     db: Session = Depends(get_db)
 ):
-    created = contrato_crud.create_contrato(db, contrato, id_instructor=id_instructor)  # Pasar el ID de la URL
+    created = contrato_crud.create_contrato(db, contrato)
 
     if not created:
         raise HTTPException(

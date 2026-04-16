@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 # ==============================
 # CREAR CONTRATO
 # ==============================
-def create_contrato(db: Session, contrato: ContratoCreate, id_instructor: int) -> bool:
+def create_contrato(db: Session, contrato: ContratoCreate) -> bool:
     try:
         query = text("""
             INSERT INTO contrato (
@@ -40,7 +40,7 @@ def create_contrato(db: Session, contrato: ContratoCreate, id_instructor: int) -
             )
         """)
 
-        db.execute(query,{"id_instructor": id_instructor, **contrato.model_dump()})
+        db.execute(query, contrato.model_dump())
         db.commit()
         return True
 
