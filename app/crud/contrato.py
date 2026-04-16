@@ -190,10 +190,13 @@ def get_contrato_informe(db: Session, id_contrato: int):
             co.dependencia,
             ins.nombres,
             ins.apellidos,
-            ins.numero_documento
+            ins.numero_documento,
+            sup.nombre AS supervisor_nombres
         FROM contrato co
         JOIN instructor ins 
             ON ins.id_instructor = co.id_instructor
+        LEFT JOIN supervisor sup 
+            ON sup.id_supervisor = ins.id_supervisor
         WHERE co.id_contrato = :id_contrato
     """)
 
@@ -214,10 +217,13 @@ def get_contrato_instructor(db: Session):
             ins.numero_documento,
             co.numero_contrato,
             co.crp,
-            co.cdp
+            co.cdp,
+            sup.nombre AS supervisor_nombres
             FROM instructor ins
             LEFT JOIN contrato co 
-            ON co.id_instructor = ins.id_instructor;
+            ON co.id_instructor = ins.id_instructor
+            LEFT JOIN supervisor sup 
+            ON sup.id_supervisor = ins.id_supervisor;
         """)
 
         result = db.execute(query)
