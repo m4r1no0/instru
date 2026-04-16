@@ -213,7 +213,8 @@ def get_contrato_instructor(db: Session):
             ins.apellidos,
             ins.numero_documento,
             co.numero_contrato,
-            co.crp
+            co.crp,
+            co.cdp
             FROM instructor ins
             LEFT JOIN contrato co 
             ON co.id_instructor = ins.id_instructor;
