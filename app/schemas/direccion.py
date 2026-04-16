@@ -9,7 +9,7 @@ class DireccionBase(BaseModel):
     id_instructor: int
     municipio: str = Field(..., min_length=2, max_length=30)
     barrio: str = Field(..., min_length=2, max_length=30)
-    complemento: str = Field(..., min_length=2, max_length=50)
+    complemento: str = Field(..., min_length=2)
 
 
 # ======================================
