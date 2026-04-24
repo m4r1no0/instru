@@ -24,6 +24,11 @@ class Settings(BaseSettings):
     jwt_algorithm: str = os.getenv("JWT_ALGORITHM", "HS256")
     jwt_access_token_expire_minutes: int = int(os.getenv("JWT_ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
 
+    smtp_host: str
+    smtp_port: int
+    smtp_user: str
+    smtp_pass: str
+
     class Config:
         env_file = ".env"
 

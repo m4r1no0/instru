@@ -6,6 +6,8 @@ from app.router import (
     poliza, rol, supervisor, area_formacion, informe, InformeDos,informeTres
 )
 
+from app.router.email_router import router as email_router
+
 app = FastAPI()
 
 # CORS (solo uno)
@@ -34,6 +36,7 @@ app.include_router(area_formacion.router, prefix="/area_formacion", tags=["area_
 app.include_router(informe.router, tags=["informes"])
 app.include_router(InformeDos.router, tags=["informes"])
 app.include_router(informeTres.router, tags=["informes"])
+app.include_router(email_router)
 
 @app.get("/")
 def read_root():
