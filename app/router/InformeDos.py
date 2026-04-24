@@ -44,6 +44,6 @@ def generar_informe_contrato(
 
     return FileResponse(
         tmp_file.name,
-        filename=f"Contrato_{id_contrato}.docx",
+        filename=f"Contrato_acta_{id_contrato}.docx",
         media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     )
