@@ -151,8 +151,24 @@ def get_all_direcciones(db: Session) -> Optional[List[dict]]:
     """
     try:
         query = text("""
-            SELECT id_direccion, id_instructor, municipio, barrio, complemento 
-            FROM direccion
+            SELECT 
+                i.id_instructor, 
+                CONCAT(i.nombres, ' ', i.apellidos) AS nombre,
+                d.id_direccion,
+                d.municipio,
+                d.complemento,
+                c.telefono,
+                c.correo_personal
+            FROM instructor i
+            LEFT JOIN direccion d ON i.id_instructor = d.id_instructor
+            LEFT JOIN contacto c ON i.id_instructor = c.id_instructor
+            WHERE i.id_instructor IN (
+                SELECT id_instructor
+                FROM direccion
+                GROUP BY id_instructor
+                HAVING COUNT(*) > 1
+            )
+            ORDER BY i.id_instructor, d.id_direccion;
         """)
 
         result = db.execute(query).mappings().all()

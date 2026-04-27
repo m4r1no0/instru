@@ -10,6 +10,9 @@ class DireccionBase(BaseModel):
     municipio: str = Field(..., min_length=2, max_length=30)
     barrio: str = Field(..., min_length=2, max_length=30)
     complemento: str = Field(..., min_length=2)
+    nombres : Optional[str] = Field(default=None, min_length=2, max_length=50)
+    telefono : Optional[str] = Field(default=None, min_length=7, max_length=15)
+    correo_personal : Optional[str] = Field(default=None, min_length=5, max_length=50)
 
 
 # ======================================
@@ -31,9 +34,15 @@ class DireccionUpdate(BaseModel):
 # ======================================
 # RESPUESTA
 # ======================================
-class DireccionOut(DireccionBase):
+class DireccionOut(BaseModel):
+    id_instructor: int
     id_direccion: int
-
+    nombre: Optional[str] = None  # ← Cambiado de 'nombres' a 'nombre'
+    municipio: str
+    complemento: str
+    telefono: Optional[str] = None  # ← Agregado
+    correo_personal: Optional[str] = None  # ← Agregado
+    # barrio se elimina porque no está en el SELECT
+    
     class Config:
         from_attributes = True
-
