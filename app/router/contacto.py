@@ -13,11 +13,23 @@ from app.crud import contacto as contacto_crud
 
 router = APIRouter()
 
+# =====================================
+# LISTAR POR INSTRUCTOR
+# =====================================
+@router.get("/all", response_model=List[ContactoOut])
+def get_all_contactos(
+    db: Session = Depends(get_db)
+):
+    result = contacto_crud.get_all_contactos(db)
+    return result
+
+
+
 
 # =====================================
 # CREAR
 # =====================================
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/create", status_code=status.HTTP_201_CREATED)
 def create_contacto(
     contacto: ContactoCreate,
     db: Session = Depends(get_db)
@@ -48,21 +60,6 @@ def get_contacto(
         )
 
     return contacto
-
-
-# =====================================
-# LISTAR POR INSTRUCTOR
-# =====================================
-@router.get("/instructor/{id_instructor}",
-            response_model=List[ContactoOut])
-def get_contactos_by_instructor(
-    id_instructor: int,
-    db: Session = Depends(get_db)
-):
-    return contacto_crud.get_contactos_by_instructor(
-        db,
-        id_instructor
-    )
 
 
 # =====================================

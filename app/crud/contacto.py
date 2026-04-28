@@ -1,11 +1,42 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import text
-from typing import List
+from typing import List, Optional
 import logging
 
 from app.schemas.contacto import ContactoCreate, ContactoUpdate
 
 logger = logging.getLogger(__name__)
+
+# =====================================
+# LISTAR POR INSTRUCTOR
+# =====================================
+def get_all_contactos(db: Session) -> Optional[List[dict]]:
+    try:
+        query = text("""
+            SELECT 
+    c.id_instructor, 
+    CONCAT(i.nombres, ' ', i.apellidos) AS nombre,
+    c.id_contacto,
+    c.telefono,
+    c.correo_personal,
+    c.correo_institucional
+    FROM instructor i
+    LEFT JOIN contacto c ON i.id_instructor = c.id_instructor
+    WHERE i.id_instructor IN (
+        SELECT id_instructor
+        FROM contacto
+        GROUP BY id_instructor
+    )
+    ORDER BY i.id_instructor;
+        """)
+
+        result = db.execute(
+                query).mappings().all()
+        return result
+    except Exception as e:
+        logger.error(f"Error al listar contactos: {e}")
+        raise Exception("Error de base de datos")
+
 
 
 # =====================================
@@ -55,27 +86,6 @@ def get_contacto_by_id(db: Session, id_contacto: int):
 
     except Exception as e:
         logger.error(f"Error al obtener contacto: {e}")
-        raise Exception("Error de base de datos")
-
-
-# =====================================
-# LISTAR POR INSTRUCTOR
-# =====================================
-def get_contactos_by_instructor(db: Session, id_instructor: int):
-    try:
-        query = text("""
-            SELECT *
-            FROM contacto
-            WHERE id_instructor = :id_instructor
-        """)
-
-        return db.execute(
-            query,
-            {"id_instructor": id_instructor}
-        ).mappings().all()
-
-    except Exception as e:
-        logger.error(f"Error al listar contactos: {e}")
         raise Exception("Error de base de datos")
 
 
