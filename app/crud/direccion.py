@@ -166,7 +166,6 @@ def get_all_direcciones(db: Session) -> Optional[List[dict]]:
                 SELECT id_instructor
                 FROM direccion
                 GROUP BY id_instructor
-                HAVING COUNT(*) > 1
             )
             ORDER BY i.id_instructor, d.id_direccion;
         """)

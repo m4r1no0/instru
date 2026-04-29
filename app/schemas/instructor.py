@@ -30,12 +30,31 @@ class InstructorUpdate(BaseModel):
 
 # 🔹 Para devolver al frontend (SÍ incluye id)
 class InstructorOut(BaseModel):
+    # Campos de instructor
     id_instructor: int
     tipo_documento: str
     numero_documento: int
     nombres: str
-    apellidos: str
     fecha_nacimiento: Optional[date] = None
     fecha_expedicion: Optional[date] = None
-    arl: Optional[str] = None
+    arl: Optional[str] = None # CONCAT(i.nombres, ' ', i.apellidos)
+    
+    # Campos de supervisor
     id_supervisor: Optional[int] = None
+    nombre: Optional[str] = None  # s.nombre (nombre del supervisor)
+    
+    # Campos de contrato
+    numero_contrato: Optional[str] = None
+    crp: Optional[str] = None
+    cdp: Optional[str] = None
+    estado: Optional[str] = None
+    valor_contrato: Optional[float] = None
+    valor_mes: Optional[float] = None
+    valorAdDi: Optional[float] = None
+    rubro: Optional[str] = None
+    dependencia: Optional[str] = None
+    fecha_inicio: Optional[date] = None
+    fecha_fin: Optional[date] = None
+    
+    class Config:
+        from_attributes = True

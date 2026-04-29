@@ -156,18 +156,29 @@ def get_all_instructores_paginated(
         offset = (page - 1) * size
 
         query = text("""
-            SELECT
-                id_instructor,
-                id_supervisor,
-                tipo_documento,
-                numero_documento,
-                nombres,
-                apellidos,
-                fecha_nacimiento,
-                fecha_expedicion,
-                arl
-            FROM instructor
-            ORDER BY id_instructor
+             SELECT 
+                s.id_supervisor,
+                s.nombre,
+                c.numero_contrato,
+                c.crp,
+                c.cdp,
+                c.estado,
+                c.valor_contrato,
+                c.valor_mes,
+                c.valorAdDi,
+                c.rubro,
+                c.dependencia,
+                c.fecha_inicio,
+                c.fecha_fin,
+                CONCAT(i.nombres, ' ', i.apellidos) AS instructor_nombre,
+                i.tipo_documento,
+                i.id_instructor,
+                i.fecha_nacimiento,
+                i.fecha_expedicion,
+                i.numero_documento
+            FROM instructor i
+            LEFT JOIN supervisor s ON s.id_supervisor = i.id_supervisor
+            LEFT JOIN contrato c ON i.id_instructor = c.id_instructor
             LIMIT :limit OFFSET :offset
         """)
 
