@@ -6,6 +6,11 @@ on:
   pull_request_review_comment:
     types: [created]
   workflow_dispatch:
+    inputs:
+      prompt:
+        description: "Prompt for OpenCode"
+        required: true
+        type: string
 
 jobs:
   opencode:
@@ -32,3 +37,4 @@ jobs:
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
         with:
           model: opencode/gpt-5-codex
+          prompt: ${{ github.event.inputs.prompt || github.event.comment.body }}
