@@ -9,7 +9,10 @@ on:
 
 jobs:
   opencode:
-    if: startsWith(github.event.comment.body, '/oc')
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      startsWith(github.event.comment.body, '/oc')
+
     runs-on: ubuntu-latest
 
     permissions:
@@ -21,8 +24,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          persist-credentials: false
 
       - name: Run opencode
         uses: anomalyco/opencode/github@latest
@@ -30,4 +31,3 @@ jobs:
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
         with:
           model: opencode/gpt-5-codex
-          
