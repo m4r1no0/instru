@@ -86,17 +86,13 @@ def get_all_contratos(
 # LISTAR CONTRATOS POR INSTRUCTOR
 # ======================================
 @router.get(
-    "/instructor/{id_instructor}",
+    "/pagos/",
     response_model=List[ContratoOut]
 )
 def get_contratos_by_instructor(
-    id_instructor: int,
     db: Session = Depends(get_db)
 ):
-    return contrato_crud.get_contratos_by_instructor(
-        db,
-        id_instructor
-    )
+    return contrato_crud.get_contratos_by_instructor(db)
 
 
 # ======================================

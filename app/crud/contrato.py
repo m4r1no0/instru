@@ -100,18 +100,24 @@ def get_all_contratos(db: Session):
 # ==============================
 # LISTAR POR INSTRUCTOR
 # ==============================
-def get_contratos_by_instructor(db: Session, id_instructor: int):
+def get_contratos_by_instructor(db: Session):
     try:
         query = text("""
-            SELECT *
-            FROM contrato
-            WHERE id_instructor = :id_instructor
+            SELECT 
+                CONCAT(ins.nombres, ' ', ins.apellidos) AS nombre_completo,
+                co.numero_contrato,
+                co.fecha_inicio,
+                co.fecha_fin,
+                co.vigencia,
+                co.valor_contrato,
+                co.valor_mes_inicial,
+                co.valor_mes_final
+            FROM contrato co
+            JOIN instructor ins 
+                ON ins.id_instructor = co.id_instructor;
         """)
-
-        return db.execute(
-            query,
-            {"id_instructor": id_instructor}
-        ).mappings().all()
+        result = db.execute(query)
+        return result.mappings().all()
 
     except Exception as e:
         logger.error(f"Error al listar contratos del instructor: {e}")
