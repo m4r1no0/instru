@@ -14,8 +14,10 @@ class ContratoBase(BaseModel):
     fecha_fin: Optional[date] = None
     vigencia: Optional[date] = None
     valor_contrato: Optional[Union[Decimal, str, float]] = None
-    valorAdDi : Optional[Union[Decimal, str, float]] = None
-    valor_mes : Optional[Union[Decimal, str, float]] = None
+    valorAdDi : Optional[Decimal] = None
+    valor_mes : Optional[Decimal] = None
+    valor_mes_inicial: Optional[Decimal] = None
+    valor_mes_final: Optional[Decimal] = None
     estado: Optional[str] = Field(default=None, max_length=30)
     cdp: Optional[int] 
     crp: Optional[int] 
@@ -42,6 +44,8 @@ class ContratoUpdate(BaseModel):
     valor_contrato: Optional[Decimal] = None
     valor_mes: Optional[Union[Decimal, str, float]] = None  # Aceptar múltiples tipos
     valorAdDi : Optional[Union[Decimal, str, float]] = None
+    valor_mes_inicial: Optional[Union[Decimal, str, float]] = None
+    valor_mes_final: Optional[Union[Decimal, str, float]] = None
     estado: Optional[str] = Field(default=None, max_length=30)
     cdp: Optional[str]
     crp: Optional[str] 
