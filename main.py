@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.router import (
     pago, users, auth, instructor, contrato,
     direccion, contacto, proceso, programa,
-    poliza, rol, supervisor, area_formacion, informe, InformeDos,informeTres
+    poliza, rol, supervisor, area_formacion, informe, InformeDos,informeTres,cesion
 )
 
 from app.router.email_router import router as email_router
@@ -36,6 +36,7 @@ app.include_router(area_formacion.router, prefix="/area_formacion", tags=["area_
 app.include_router(informe.router, tags=["informes"])
 app.include_router(InformeDos.router, tags=["informes"])
 app.include_router(informeTres.router, tags=["informes"])
+app.include_router(cesion.router, prefix="/cesion", tags=["cesion"])
 app.include_router(email_router)
 
 @app.get("/")
@@ -44,6 +45,6 @@ def read_root():
         "message": "ok",
         "autor": "Marino A Osorio D"
     }
-print("Rutas disponibles:")
-for route in app.routes:
-    print(f"{route.methods} {route.path}")
+# print("Rutas disponibles:")
+# for route in app.routes:
+#     print(f"{route.methods} {route.path}")

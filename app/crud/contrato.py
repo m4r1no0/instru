@@ -1,5 +1,5 @@
-from sqlalchemy.orm import Session
-from sqlalchemy import text
+from sqlalchemy.orm import Session # pyright: ignore[reportMissingImports]
+from sqlalchemy import text # type: ignore
 from typing import List, Optional
 import logging
 
@@ -234,4 +234,22 @@ def get_contrato_instructor(db: Session):
 
     except Exception as e:
         logger.error(f"Error al listar contratos: {e}")
+        raise Exception("Error de base de datos")
+    
+
+def get_contrato_modificacion(db:Session, id_contrato: int):
+    try:
+        query = text("""
+            INSERT INTO cesion (
+        """)
+
+        result = db.execute(
+            query,
+            {"id_contrato": id_contrato}
+        ).mappings().first()
+
+        return dict(result) if result else None
+
+    except Exception as e:
+        logger.error(f"Error al obtener contrato para modificación: {e}")
         raise Exception("Error de base de datos")
