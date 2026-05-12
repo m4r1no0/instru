@@ -5,6 +5,7 @@ from typing import List
 from core.database import get_db
 from app.schemas.contrato import (
     ContratoCreate,
+    ContratoInstructorPago,
     ContratoUpdate,
     ContratoOut,
     InstructorContratoOut
@@ -48,6 +49,31 @@ def get_contrato_with_instructor(db: Session = Depends(get_db)):
 
 
 # ======================================
+# LISTAR TODOS LOS CONTRATOS
+# ======================================
+@router.get(
+    "/",
+    response_model=List[ContratoOut]
+)
+def get_all_contratos(
+    db: Session = Depends(get_db)
+):
+    return contrato_crud.get_all_contratos(db)
+
+
+# ======================================
+# LISTAR CONTRATOS POR INSTRUCTOR
+# ======================================
+@router.get(
+    "/pagos",
+    response_model=List[ContratoInstructorPago]
+)
+def get_contratos_by_instructor(
+    db: Session = Depends(get_db)
+):
+    return contrato_crud.get_contratos_by_instructor(db)
+
+# ======================================
 # OBTENER CONTRATO POR ID
 # ======================================
 @router.get(
@@ -68,31 +94,6 @@ def get_contrato(
 
     return contrato
 
-
-# ======================================
-# LISTAR TODOS LOS CONTRATOS
-# ======================================
-@router.get(
-    "/",
-    response_model=List[ContratoOut]
-)
-def get_all_contratos(
-    db: Session = Depends(get_db)
-):
-    return contrato_crud.get_all_contratos(db)
-
-
-# ======================================
-# LISTAR CONTRATOS POR INSTRUCTOR
-# ======================================
-@router.get(
-    "/pagos/",
-    response_model=List[ContratoOut]
-)
-def get_contratos_by_instructor(
-    db: Session = Depends(get_db)
-):
-    return contrato_crud.get_contratos_by_instructor(db)
 
 
 # ======================================

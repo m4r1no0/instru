@@ -67,3 +67,16 @@ class InstructorContratoOut(BaseModel):
     crp: Optional[int] = Field(None, description="CRP del contrato (puede ser NULL si el instructor no tiene contrato)")
     numero_documento: Optional[int]
     supervisor_nombres: Optional[str] = Field(None, description="Nombres del supervisor (puede ser NULL si no tiene supervisor)")
+
+
+class ContratoInstructorPago(BaseModel):
+    nombre_completo: str
+    numero_contrato: Optional[str]
+    fecha_inicio: Optional[date]
+    fecha_fin: Optional[date]
+    vigencia: Optional[date]
+    valor_mes: Optional[Decimal]
+    valor_contrato: Optional[Decimal]
+    valor_mes_inicial: Optional[Decimal]
+    valor_mes_final: Optional[Decimal]
+    valorAdDi: Optional[Decimal]

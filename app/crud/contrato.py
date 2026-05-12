@@ -109,9 +109,11 @@ def get_contratos_by_instructor(db: Session):
                 co.fecha_inicio,
                 co.fecha_fin,
                 co.vigencia,
+                co.valor_mes,
                 co.valor_contrato,
                 co.valor_mes_inicial,
-                co.valor_mes_final
+                co.valor_mes_final,
+                co.valorAdDi
             FROM contrato co
             JOIN instructor ins 
                 ON ins.id_instructor = co.id_instructor;
