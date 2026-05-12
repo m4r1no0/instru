@@ -18,13 +18,24 @@ router = APIRouter()
 # =====================================
 # CREAR
 # =====================================
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/create", status_code=status.HTTP_201_CREATED)
 def create_area(
     area: AreaFormacionCreate,
     db: Session = Depends(get_db)
 ):
     area_crud.create_area_formacion(db, area)
     return {"message": "Área creada correctamente"}
+
+# =====================================
+# LISTAR TODAS (CON PROGRAMA)
+# =====================================
+@router.get("/all",
+            response_model=List[AreaFormacionWithPrograma])
+def get_all_areas(
+    db: Session = Depends(get_db)
+):
+    return area_crud.get_all_areas(db)
+
 
 
 # =====================================
@@ -45,17 +56,6 @@ def get_area(
         )
 
     return area
-
-
-# =====================================
-# LISTAR TODAS (CON PROGRAMA)
-# =====================================
-@router.get("/",
-            response_model=List[AreaFormacionWithPrograma])
-def get_all_areas(
-    db: Session = Depends(get_db)
-):
-    return area_crud.get_all_areas(db)
 
 
 # =====================================

@@ -74,7 +74,7 @@ def get_all_areas(db: Session):
             a.objeto,
             a.descripcion
         FROM area_formacion a
-        JOIN programa p
+        JOIN programa_formacion p
             ON a.id_programa = p.id_programa
         ORDER BY a.nombre_area
     """)
