@@ -55,6 +55,10 @@ class InstructorOut(BaseModel):
     dependencia: Optional[str] = None
     fecha_inicio: Optional[date] = None
     fecha_fin: Optional[date] = None
+
+    # campo de programa_formacion
+    nombre_programa: Optional[str] = None
+    nombre_area: Optional[str] = None
     
     class Config:
         from_attributes = True

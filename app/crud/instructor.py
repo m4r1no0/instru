@@ -155,30 +155,39 @@ def get_all_instructores_paginated(
     try:
         offset = (page - 1) * size
 
-        query = text("""
-             SELECT 
-                s.id_supervisor,
-                s.nombre,
-                c.numero_contrato,
-                c.crp,
-                c.cdp,
-                c.estado,
-                c.valor_contrato,
-                c.valor_mes,
-                c.valorAdDi,
-                c.rubro,
-                c.dependencia,
-                c.fecha_inicio,
-                c.fecha_fin,
-                CONCAT(i.nombres, ' ', i.apellidos) AS instructor_nombre,
-                i.tipo_documento,
-                i.id_instructor,
-                i.fecha_nacimiento,
-                i.fecha_expedicion,
-                i.numero_documento
-            FROM instructor i
-            LEFT JOIN supervisor s ON s.id_supervisor = i.id_supervisor
-            LEFT JOIN contrato c ON i.id_instructor = c.id_instructor
+        query = text("""SELECT 
+                            s.id_supervisor,
+                            s.nombre,
+                            c.numero_contrato,
+                            c.crp,
+                            c.cdp,
+                            c.estado,
+                            c.valor_contrato,
+                            c.valor_mes,
+                            c.valorAdDi,
+                            c.rubro,
+                            c.dependencia,
+                            c.fecha_inicio,
+                            c.fecha_fin,
+                            pro.nombre_programa,
+                            CONCAT(i.nombres, ' ', i.apellidos) AS instructor_nombre,
+                            i.tipo_documento,
+                            i.id_instructor,
+                            i.fecha_nacimiento,
+                            i.fecha_expedicion,
+                            i.numero_documento,
+                            a.nombre_area
+                        FROM instructor i
+                        LEFT JOIN supervisor s 
+                            ON s.id_supervisor = i.id_supervisor
+                        LEFT JOIN contrato c 
+                            ON i.id_instructor = c.id_instructor
+                        LEFT JOIN instructor_programa ins 
+                            ON i.id_instructor = ins.id_instructor
+                        LEFT JOIN programa_formacion pro 
+                            ON pro.id_programa = ins.id_programa
+                        LEFT JOIN area_formacion a 
+                            ON i.id_area = a.id_area
             LIMIT :limit OFFSET :offset
         """)
 
