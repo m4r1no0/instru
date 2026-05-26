@@ -11,11 +11,12 @@ logger = logging.getLogger(__name__)
 # ===============================
 # CREAR USUARIO
 # ===============================
-def create_user(db: Session, user: UserCreate) -> Optional[bool]:
+def create_user(db: Session, user: UserCreate):
+
     try:
+
         # Encriptar contraseña
-        pass_encrypt = get_hashed_password(user.pass_hash)
-        user.pass_hash = pass_encrypt
+        pass_encrypt = get_hashed_password(user.password)
 
         query = text("""
             INSERT INTO usuarios (
@@ -37,15 +38,23 @@ def create_user(db: Session, user: UserCreate) -> Optional[bool]:
             )
         """)
 
-        db.execute(query, user.model_dump())
+        data = user.model_dump()
+
+        # eliminar password original
+        data.pop("password")
+
+        # agregar hash
+        data["pass_hash"] = pass_encrypt
+
+        db.execute(query, data)
         db.commit()
+
         return True
 
     except Exception as e:
         db.rollback()
         logger.error(f"Error al crear usuario: {e}")
         raise Exception("Error de base de datos al crear el usuario")
-
 
 # ===============================
 # LOGIN (CON HASH)
