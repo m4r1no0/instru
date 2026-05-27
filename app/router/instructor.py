@@ -47,23 +47,6 @@ def obtener_instructor(
     return instructor
 
 # =====================================================
-# OBTENER INSTRUCTOR POR EMAIL
-# =====================================================
-
-@router.get("/email/{email}")
-def obtener_por_email(
-    email: str,
-    db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user)
-):
-    instructor = get_user_by_email(db, email)
-
-    if not instructor:
-        raise HTTPException(status_code=404, detail="Instructor no encontrado")
-
-    return instructor
-
-# =====================================================
 # OBTENER INSTRUCTOR CON CONTACTOS
 # =====================================================
 
