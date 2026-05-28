@@ -59,24 +59,45 @@ def get_user_by_email(db: Session, email: str):
         logger.error(f"Error al obtener instructor por nombre: {e}")
         raise Exception("Error de base de datos al obtener el usuario estoy aqui")
     
-def update_user_by_id(db: Session, user_id: int, user:InstructorUpdate) -> Optional[bool]:
+def update_user_by_id(db: Session, user_id: int, user: InstructorUpdate) -> Optional[bool]:
     try:
-        user_data= user.model_dump(exclude_unset=True)
+        # Excluir campos no enviados (solo actualizar los que vienen en la petición)
+        user_data = user.model_dump(exclude_unset=True)
+        
+        # Si no hay datos para actualizar, retornar False
         if not user_data:
             return False
-        set_clauses = ",".join([f"{key} = :{key}" for key in user_data.keys()])
-        sentencia = text (f""" UPDATE instructor
-                          SET {set_clauses}   
-                          WHERE id_instructor = :id_instructor """)
-
+        
+        # Construir dinámicamente la parte SET de la consulta SQL
+        # Ejemplo: "nombre = :nombre, email = :email"
+        set_clauses = ", ".join([f"{key} = :{key}" for key in user_data.keys()])
+        
+        # Crear la consulta SQL con text()
+        sentencia = text(f"""
+            UPDATE instructor 
+            SET {set_clauses}   
+            WHERE id_instructor = :id_instructor
+        """)
+        
+        # Agregar el id_instructor al diccionario de parámetros
         user_data["id_instructor"] = user_id
-        result = db.execute(sentencia,user_data)
+        
+        # Ejecutar la consulta
+        result = db.execute(sentencia, user_data)
+        
+        # Confirmar los cambios en la base de datos
         db.commit()
+        
+        # Retornar True si se actualizó al menos una fila, False si no
         return result.rowcount > 0
+        
     except Exception as e:
+        # Revertir cualquier cambio pendiente
         db.rollback()
-        print("ERROR REAL:", e)
-        raise
+        # Registrar el error real para debugging
+        print(f"ERROR REAL: {e}")
+        # Lanzar una excepción con mensaje claro
+        raise Exception(f"Error de base de datos al actualizar el usuario con ID {user_id}: {str(e)}")
     
 def get_user_by_id(db: Session, id: int):
     try:
@@ -187,7 +208,7 @@ def get_all_instructores_paginated(
                         LEFT JOIN programa_formacion pro 
                             ON pro.id_programa = ins.id_programa
                         LEFT JOIN area_formacion a 
-                            ON i.id_area = a.id_area
+                            ON i.id_area = a.id_area;
             LIMIT :limit OFFSET :offset
         """)
 
