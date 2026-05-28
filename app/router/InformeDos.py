@@ -27,7 +27,7 @@ def generar_informe_contrato(
     data = contrato.get_contrato_informe(db, id_contrato)
 
     # 👇 PON EL PRINT AQUÍ
-    print("DATA DEL INFORME:")
+    print("DATA DEL ACTA:")
     print(data)
 
     if not data:
