@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 def create_programa(db: Session, programa: ProgramaCreate) -> bool:
     try:
         query = text("""
-            INSERT INTO programa (
+            INSERT INTO programa_formacion (
                 codigo_programa,
                 nombre_programa,
                 nivel_formacion,
@@ -42,7 +42,7 @@ def create_programa(db: Session, programa: ProgramaCreate) -> bool:
 def get_programa_by_id(db: Session, id_programa: int):
     query = text("""
         SELECT *
-        FROM programa
+        FROM programa_formacion
         WHERE id_programa = :id_programa
     """)
 
@@ -58,7 +58,7 @@ def get_programa_by_id(db: Session, id_programa: int):
 def get_programa_by_codigo(db: Session, codigo: str):
     query = text("""
         SELECT *
-        FROM programa
+        FROM programa_formacion
         WHERE codigo_programa = :codigo
     """)
 
@@ -74,7 +74,7 @@ def get_programa_by_codigo(db: Session, codigo: str):
 def get_all_programas(db: Session):
     query = text("""
         SELECT *
-        FROM programa
+        FROM programa_formacion
         ORDER BY nombre_programa
     """)
 
@@ -99,7 +99,7 @@ def update_programa(
     )
 
     query = text(f"""
-        UPDATE programa
+        UPDATE programa_formacion
         SET {set_clause}
         WHERE id_programa = :id_programa
     """)
@@ -117,7 +117,7 @@ def update_programa(
 # =====================================
 def delete_programa(db: Session, id_programa: int) -> bool:
     query = text("""
-        DELETE FROM programa
+        DELETE FROM programa_formacion
         WHERE id_programa = :id_programa
     """)
 
