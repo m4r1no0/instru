@@ -80,3 +80,5 @@ class ContratoInstructorPago(BaseModel):
     valor_mes_inicial: Optional[Decimal]
     valor_mes_final: Optional[Decimal]
     valorAdDi: Optional[Decimal]
+
+    
