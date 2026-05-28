@@ -10,9 +10,7 @@ class DireccionBase(BaseModel):
     municipio: str = Field(..., min_length=2, max_length=30)
     barrio: str = Field(..., min_length=2, max_length=30)
     complemento: str = Field(..., min_length=2)
-    nombres : Optional[str] = Field(default=None, min_length=2, max_length=50)
-    telefono : Optional[str] = Field(default=None, min_length=7, max_length=15)
-    correo_personal : Optional[str] = Field(default=None, min_length=5, max_length=50)
+
 
 
 # ======================================
@@ -33,7 +31,7 @@ class DireccionUpdate(BaseModel):
 
 # ======================================
 # RESPUESTA
-# ======================================
+# ======================================    
 class DireccionOut(BaseModel):
     id_instructor: int
     id_direccion: int
