@@ -194,6 +194,7 @@ def get_all_instructores_paginated(
                             CONCAT(i.nombres, ' ', i.apellidos) AS instructor_nombre,
                             i.tipo_documento,
                             i.id_instructor,
+                            i.estado AS estado_instructor,
                             i.fecha_nacimiento,
                             i.fecha_expedicion,
                             i.numero_documento,
@@ -229,3 +230,5 @@ def count_instructores(db: Session):
     query = text("SELECT COUNT(*) as total FROM instructor")
     result = db.execute(query).mappings().first()
     return result["total"]
+
+
