@@ -12,7 +12,6 @@ class InstructorBase(BaseModel):
     fecha_expedicion: Optional[date] = None
     arl: Optional[str] = None
     id_supervisor: Optional[int] = None
-    estado_instructor: int  # Opcional
 
 # 🔹 Para crear (NO incluye id)
 class InstructorCreate(InstructorBase):

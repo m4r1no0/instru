@@ -194,7 +194,6 @@ def get_all_instructores_paginated(
                             CONCAT(i.nombres, ' ', i.apellidos) AS instructor_nombre,
                             i.tipo_documento,
                             i.id_instructor,
-                            i.estado AS estado_instructor,
                             i.fecha_nacimiento,
                             i.fecha_expedicion,
                             i.numero_documento,
