@@ -208,7 +208,7 @@ def get_all_instructores_paginated(
                         LEFT JOIN programa_formacion pro 
                             ON pro.id_programa = ins.id_programa
                         LEFT JOIN area_formacion a 
-                            ON i.id_area = a.id_area;
+                            ON i.id_area = a.id_area
             LIMIT :limit OFFSET :offset
         """)
 
