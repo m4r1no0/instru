@@ -17,12 +17,10 @@ def create_direccion(db: Session, direccion: DireccionCreate) -> bool:
             INSERT INTO direccion (
                 id_instructor,
                 municipio,
-                barrio,
                 complemento
             ) VALUES (
                 :id_instructor,
                 :municipio,
-                :barrio,
                 :complemento
             )
         """)
