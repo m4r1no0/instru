@@ -4,7 +4,7 @@ from typing import Optional
 
 from core.database import get_db
 from app.router.dependencies import get_current_user
-from app.schemas.instructor import InstructorCreate, InstructorOut, InstructorUpdate
+from app.schemas.instructor import InstructorCreate, InstructorOut, InstructorUpdate, InstructorBase
 from app.crud.instructor import (
     create_instructor,
     get_user_by_id,
@@ -13,7 +13,8 @@ from app.crud.instructor import (
     get_instructores_by_supervisor,
     get_all_instructores_paginated,
     count_instructores,
-    update_user_by_id
+    update_user_by_id,
+    delete_instructor
 )
 
 router = APIRouter()
@@ -117,3 +118,20 @@ def actualizar_instructor(
         )
 
     return {"message": "Instructor actualizado correctamente"}
+
+
+@router.delete("/delete/{id_instructor}", response_model=dict)
+def delete_instructor_by_id(  # ← Nombre diferente al importado
+    id_instructor: int,
+    db: Session = Depends(get_db)
+):
+    # Usar la función importada
+    deleted = delete_instructor(db, id_instructor)
+    
+    if not deleted:
+        raise HTTPException(
+            status_code=404,
+            detail="Instructor no encontrado"
+        )
+    
+    return {"message": "Instructor eliminado correctamente"}

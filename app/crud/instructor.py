@@ -231,3 +231,22 @@ def count_instructores(db: Session):
     return result["total"]
 
 
+def delete_instructor(db: Session, id_instructor: int) -> bool:
+    try:
+        query = text("""
+            DELETE FROM instructor
+            WHERE id_instructor = :id_instructor
+        """)
+
+        result = db.execute(
+            query,
+            {"id_instructor": id_instructor}
+        )
+        db.commit()
+
+        return result.rowcount > 0
+
+    except Exception as e:
+        db.rollback()
+        logger.error(f"Error al eliminar instructor: {e}")
+        raise Exception("Error de base de datos")
