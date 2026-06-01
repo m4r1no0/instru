@@ -8,7 +8,6 @@ from typing import Optional
 class DireccionBase(BaseModel):
     id_instructor: int
     municipio: str = Field(..., min_length=2, max_length=30)
-    barrio: str = Field(..., min_length=2, max_length=30)
     complemento: str = Field(..., min_length=2)
 
 
@@ -25,7 +24,6 @@ class DireccionCreate(DireccionBase):
 # ======================================
 class DireccionUpdate(BaseModel):
     municipio: Optional[str] = Field(default=None, min_length=2, max_length=30)
-    barrio: Optional[str] = Field(default=None, min_length=2, max_length=30)
     complemento: Optional[str] = Field(default=None, min_length=2, max_length=50)
 
 
@@ -40,7 +38,6 @@ class DireccionOut(BaseModel):
     complemento: str
     telefono: Optional[str] = None  # ← Agregado
     correo_personal: Optional[str] = None  # ← Agregado
-    # barrio se elimina porque no está en el SELECT
     
     class Config:
         from_attributes = True
