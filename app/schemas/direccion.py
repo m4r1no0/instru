@@ -32,7 +32,7 @@ class DireccionUpdate(BaseModel):
 # ======================================    
 class DireccionOut(BaseModel):
     id_instructor: int
-    nombre: str
+    nombre: Optional[str] = None 
     id_direccion: Optional[int] = None  # ← Permitir None
     municipio: Optional[str] = None      # ← Permitir None
     complemento: Optional[str] = None    # ← Permitir None
