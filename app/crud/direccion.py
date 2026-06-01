@@ -148,24 +148,19 @@ def get_all_direcciones(db: Session) -> Optional[List[dict]]:
         List[dict]: Lista de direcciones o None si hay error
     """
     try:
-        query = text("""
-            SELECT 
-                i.id_instructor, 
-                CONCAT(i.nombres, ' ', i.apellidos) AS nombre,
-                d.id_direccion,
-                d.municipio,
-                d.complemento,
-                c.telefono,
-                c.correo_personal
-            FROM instructor i
-            LEFT JOIN direccion d ON i.id_instructor = d.id_instructor
-            LEFT JOIN contacto c ON i.id_instructor = c.id_instructor
-            WHERE i.id_instructor IN (
-                SELECT id_instructor
-                FROM direccion
-                GROUP BY id_instructor
-            )
-            ORDER BY i.id_instructor, d.id_direccion;
+        query = text("""SELECT 
+                            i.id_instructor, 
+                            CONCAT(i.nombres, ' ', i.apellidos) AS nombre,
+                            d.id_direccion,
+                            d.municipio,
+                            d.complemento,
+                            c.telefono,
+                            c.correo_personal,
+                            c.correo_institucional
+                        FROM instructor i
+                        LEFT JOIN direccion d ON i.id_instructor = d.id_instructor
+                        LEFT JOIN contacto c ON i.id_instructor = c.id_instructor
+                        ORDER BY i.id_instructor, d.id_direccion;
         """)
 
         result = db.execute(query).mappings().all()

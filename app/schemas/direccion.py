@@ -32,12 +32,13 @@ class DireccionUpdate(BaseModel):
 # ======================================    
 class DireccionOut(BaseModel):
     id_instructor: int
-    id_direccion: int
-    nombre: Optional[str] = None  # ← Cambiado de 'nombres' a 'nombre'
-    municipio: str
-    complemento: str
-    telefono: Optional[str] = None  # ← Agregado
-    correo_personal: Optional[str] = None  # ← Agregado
+    nombre: str
+    id_direccion: Optional[int] = None  # ← Permitir None
+    municipio: Optional[str] = None      # ← Permitir None
+    complemento: Optional[str] = None    # ← Permitir None
+    telefono: Optional[str] = None       # ← Permitir None
+    correo_personal: Optional[str] = None
+    correo_institucional: Optional[str] = None
     
     class Config:
         from_attributes = True
