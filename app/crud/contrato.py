@@ -89,6 +89,7 @@ def get_contratos_by_instructor(db: Session):
             
                 SELECT 
                     CONCAT(ins.nombres, ' ', ins.apellidos) AS nombre_completo,
+                    co.id_contrato,
                     co.numero_contrato,
                     co.fecha_inicio,
                     co.fecha_fin,
