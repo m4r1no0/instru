@@ -28,8 +28,8 @@ class ContactoUpdate(ContactoBase):
 # RESPUESTA
 # =====================================
 class ContactoOut(BaseModel):
-    id_contacto: int
-    id_instructor: int
+    id_contacto: Optional[int] = None
+    id_instructor: Optional[int] = None
     nombre: Optional[str] = None  # Renombrado para claridad
     correo_personal: Optional[str] = None
     correo_institucional: Optional[str] = None

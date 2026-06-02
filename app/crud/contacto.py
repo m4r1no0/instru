@@ -12,22 +12,17 @@ logger = logging.getLogger(__name__)
 # =====================================
 def get_all_contactos(db: Session) -> Optional[List[dict]]:
     try:
-        query = text("""
-            SELECT 
-    c.id_instructor, 
-    CONCAT(i.nombres, ' ', i.apellidos) AS nombre,
-    c.id_contacto,
-    c.telefono,
-    c.correo_personal,
-    c.correo_institucional
-    FROM instructor i
-    LEFT JOIN contacto c ON i.id_instructor = c.id_instructor
-    WHERE i.id_instructor IN (
-        SELECT id_instructor
-        FROM contacto
-        GROUP BY id_instructor
-    )
-    ORDER BY i.id_instructor;
+        query = text("""SELECT 
+                            i.id_instructor, 
+                            CONCAT(i.nombres, ' ', i.apellidos) AS nombre,
+                            c.id_contacto,
+                            c.telefono,
+                            c.correo_personal,
+                            c.correo_institucional
+                        FROM instructor i
+                        LEFT JOIN contacto c 
+                            ON i.id_instructor = c.id_instructor
+                        ORDER BY i.id_instructor;
         """)
 
         result = db.execute(
