@@ -79,23 +79,6 @@ def get_contrato_by_id(db: Session, id_contrato: int):
         raise Exception("Error de base de datos")
 
 
-# ==============================
-# LISTAR TODOS
-# ==============================
-def get_all_contratos(db: Session):
-    try:
-        query = text("""
-            SELECT *
-            FROM contrato
-        """)
-
-        result = db.execute(query)
-        return result.mappings().all()
-
-    except Exception as e:
-        logger.error(f"Error al listar contratos: {e}")
-        raise Exception("Error de base de datos")
-
 
 # ==============================
 # LISTAR POR INSTRUCTOR
@@ -103,20 +86,22 @@ def get_all_contratos(db: Session):
 def get_contratos_by_instructor(db: Session):
     try:
         query = text("""
-            SELECT 
-                CONCAT(ins.nombres, ' ', ins.apellidos) AS nombre_completo,
-                co.numero_contrato,
-                co.fecha_inicio,
-                co.fecha_fin,
-                co.vigencia,
-                co.valor_mes,
-                co.valor_contrato,
-                co.valor_mes_inicial,
-                co.valor_mes_final,
-                co.valorAdDi
-            FROM contrato co
-            JOIN instructor ins 
-                ON ins.id_instructor = co.id_instructor;
+            
+                SELECT 
+                    CONCAT(ins.nombres, ' ', ins.apellidos) AS nombre_completo,
+                    co.numero_contrato,
+                    co.fecha_inicio,
+                    co.fecha_fin,
+                    co.vigencia,
+                    co.valor_mes,
+                    co.valor_contrato,
+                    co.valor_mes_inicial,
+                    co.valor_mes_final,
+                    co.valorAdDi
+                FROM instructor ins
+                LEFT JOIN contrato co 
+                    ON ins.id_instructor = co.id_instructor
+                ORDER BY ins.id_instructor;
         """)
         result = db.execute(query)
         return result.mappings().all()

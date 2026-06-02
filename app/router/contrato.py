@@ -49,19 +49,6 @@ def get_contrato_with_instructor(db: Session = Depends(get_db)):
 
 
 # ======================================
-# LISTAR TODOS LOS CONTRATOS
-# ======================================
-@router.get(
-    "/",
-    response_model=List[ContratoOut]
-)
-def get_all_contratos(
-    db: Session = Depends(get_db)
-):
-    return contrato_crud.get_all_contratos(db)
-
-
-# ======================================
 # LISTAR CONTRATOS POR INSTRUCTOR
 # ======================================
 @router.get(
@@ -127,7 +114,7 @@ def update_contrato(
 # ELIMINAR CONTRATO
 # ======================================
 @router.delete(
-    "/{id_contrato}",
+    "/delete/{id_contrato}",
     response_model=dict
 )
 def delete_contrato(
