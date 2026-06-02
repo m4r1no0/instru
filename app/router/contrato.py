@@ -114,7 +114,7 @@ def update_contrato(
 # ELIMINAR CONTRATO
 # ======================================
 @router.delete(
-    "/delete/{id_contrato}",
+    "/{id_contrato}",
     response_model=dict
 )
 def delete_contrato(
