@@ -42,3 +42,4 @@ class DireccionOut(BaseModel):
     
     class Config:
         from_attributes = True
+        
