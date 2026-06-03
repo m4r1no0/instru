@@ -219,6 +219,9 @@ def get_contrato_instructor(db: Session):
             co.rubro,
             co.dependencia,
             co.id_contrato,
+            co.fecha_inicio,
+            co.fecha_fin,
+            co.vigencia,
             sup.nombre AS supervisor_nombres
             FROM instructor ins
             LEFT JOIN contrato co 
