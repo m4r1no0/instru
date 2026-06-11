@@ -11,7 +11,6 @@ class DireccionBase(BaseModel):
     complemento: str = Field(..., min_length=2)
 
 
-
 # ======================================
 # CREAR
 # ======================================
@@ -29,17 +28,16 @@ class DireccionUpdate(BaseModel):
 
 # ======================================
 # RESPUESTA
-# ======================================    
+# ======================================
 class DireccionOut(BaseModel):
     id_instructor: int
-    nombre: Optional[str] = None 
+    nombre: Optional[str] = None
     id_direccion: Optional[int] = None  # ← Permitir None
-    municipio: Optional[str] = None      # ← Permitir None
-    complemento: Optional[str] = None    # ← Permitir None
-    telefono: Optional[str] = None       # ← Permitir None
+    municipio: Optional[str] = None  # ← Permitir None
+    complemento: Optional[str] = None  # ← Permitir None
+    telefono: Optional[str] = None  # ← Permitir None
     correo_personal: Optional[str] = None
     correo_institucional: Optional[str] = None
-    
+
     class Config:
         from_attributes = True
-        

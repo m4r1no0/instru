@@ -23,6 +23,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 # HASH DE CONTRASEÑA
 # ==============================
 
+
 def get_hashed_password(password: str) -> str:
     return pwd_context.hash(password)
 
@@ -30,15 +31,14 @@ def get_hashed_password(password: str) -> str:
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
+
 # ==============================
 # CREAR TOKEN JWT
 # ==============================
 
-def create_access_token(
-    data: dict,
-    expires_delta: Optional[timedelta] = None
-) -> str:
-    
+
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
+
     to_encode = data.copy()
 
     if expires_delta:
@@ -51,9 +51,11 @@ def create_access_token(
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
+
 # ==============================
 # VERIFICAR TOKEN
 # ==============================
+
 
 def verify_token(token: str) -> str:
     try:
@@ -62,14 +64,12 @@ def verify_token(token: str) -> str:
 
         if user_id is None:
             raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Token inválido"
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Token inválido"
             )
 
         return user_id
 
     except JWTError:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token inválido o expirado"
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Token inválido o expirado"
         )

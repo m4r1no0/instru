@@ -2,10 +2,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 import logging
 
-from app.schemas.area_formacion import (
-    AreaFormacionCreate,
-    AreaFormacionUpdate
-)
+from app.schemas.area_formacion import AreaFormacionCreate, AreaFormacionUpdate
 
 logger = logging.getLogger(__name__)
 
@@ -13,10 +10,7 @@ logger = logging.getLogger(__name__)
 # =====================================
 # CREAR
 # =====================================
-def create_area_formacion(
-    db: Session,
-    area: AreaFormacionCreate
-) -> bool:
+def create_area_formacion(db: Session, area: AreaFormacionCreate) -> bool:
     try:
         query = text("""
             INSERT INTO area_formacion (
@@ -45,20 +39,14 @@ def create_area_formacion(
 # =====================================
 # OBTENER POR ID
 # =====================================
-def get_area_by_id(
-    db: Session,
-    id_area: int
-):
+def get_area_by_id(db: Session, id_area: int):
     query = text("""
         SELECT *
         FROM area_formacion
         WHERE id_area = :id_area
     """)
 
-    return db.execute(
-        query,
-        {"id_area": id_area}
-    ).mappings().first()
+    return db.execute(query, {"id_area": id_area}).mappings().first()
 
 
 # =====================================
@@ -85,10 +73,7 @@ def get_all_areas(db: Session):
 # =====================================
 # LISTAR POR PROGRAMA
 # =====================================
-def get_areas_by_programa(
-    db: Session,
-    id_programa: int
-):
+def get_areas_by_programa(db: Session, id_programa: int):
     query = text("""
         SELECT *
         FROM area_formacion
@@ -96,29 +81,20 @@ def get_areas_by_programa(
         ORDER BY nombre_area
     """)
 
-    return db.execute(
-        query,
-        {"id_programa": id_programa}
-    ).mappings().all()
+    return db.execute(query, {"id_programa": id_programa}).mappings().all()
 
 
 # =====================================
 # ACTUALIZAR
 # =====================================
-def update_area_formacion(
-    db: Session,
-    id_area: int,
-    area: AreaFormacionUpdate
-) -> bool:
+def update_area_formacion(db: Session, id_area: int, area: AreaFormacionUpdate) -> bool:
 
     area_data = area.model_dump(exclude_unset=True)
 
     if not area_data:
         return False
 
-    set_clause = ", ".join(
-        [f"{key} = :{key}" for key in area_data.keys()]
-    )
+    set_clause = ", ".join([f"{key} = :{key}" for key in area_data.keys()])
 
     query = text(f"""
         UPDATE area_formacion
@@ -137,20 +113,14 @@ def update_area_formacion(
 # =====================================
 # ELIMINAR
 # =====================================
-def delete_area_formacion(
-    db: Session,
-    id_area: int
-) -> bool:
+def delete_area_formacion(db: Session, id_area: int) -> bool:
 
     query = text("""
         DELETE FROM area_formacion
         WHERE id_area = :id_area
     """)
 
-    result = db.execute(
-        query,
-        {"id_area": id_area}
-    )
+    result = db.execute(query, {"id_area": id_area})
 
     db.commit()
 

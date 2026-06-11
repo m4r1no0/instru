@@ -8,8 +8,8 @@ import logging
 from app.schemas.instructor import InstructorCreate, InstructorUpdate
 from core.security import get_hashed_password
 
-
 logger = logging.getLogger(__name__)
+
 
 def create_instructor(db: Session, instructor: InstructorCreate):
     try:
@@ -32,73 +32,82 @@ def create_instructor(db: Session, instructor: InstructorCreate):
 
     except Exception as e:
         db.rollback()
-        raise HTTPException(
-            status_code=400,
-            detail=str(e)
-        )
+        raise HTTPException(status_code=400, detail=str(e))
+
 
 def get_user_by_email_for_login(db: Session, email: str):
     try:
-        query = text("""SELECT id_usuario, nombre, documento, usuarios.id_rol, email, telefono, estado, nombre_rol,pass_hash
+        query = text(
+            """SELECT id_usuario, nombre, documento, usuarios.id_rol, email, telefono, estado, nombre_rol,pass_hash
                      FROM usuarios
                      JOIN roles ON usuarios.id_rol = roles.id_rol
-                     WHERE email = :email""")
+                     WHERE email = :email"""
+        )
         result = db.execute(query, {"email": email}).mappings().first()
         return result
     except Exception as e:
         logger.error(f"Error al obtener usuario por email: {e}")
         raise Exception("Error de base de datos al obtener el usuario estoy aqui")
-    
+
+
 def get_user_by_email(db: Session, email: str):
     try:
-        query = text("""SELECT tipo_documento, nombres,apellidos,fecha_nacimiento, fecha_expedicion, id_supervisor,id_instructor arl FROM instructor
-                     WHERE email = :email""")
+        query = text(
+            """SELECT tipo_documento, nombres,apellidos,fecha_nacimiento, fecha_expedicion, id_supervisor,id_instructor arl FROM instructor
+                     WHERE email = :email"""
+        )
         result = db.execute(query, {"email": email}).mappings().first()
         return result
     except Exception as e:
         logger.error(f"Error al obtener instructor por nombre: {e}")
         raise Exception("Error de base de datos al obtener el usuario estoy aqui")
-    
-def update_user_by_id(db: Session, user_id: int, user: InstructorUpdate) -> Optional[bool]:
+
+
+def update_user_by_id(
+    db: Session, user_id: int, user: InstructorUpdate
+) -> Optional[bool]:
     try:
         # Excluir campos no enviados (solo actualizar los que vienen en la petición)
         user_data = user.model_dump(exclude_unset=True)
-        
+
         # Si no hay datos para actualizar, retornar False
         if not user_data:
             return False
-        
+
         # Construir dinámicamente la parte SET de la consulta SQL
         # Ejemplo: "nombre = :nombre, email = :email"
         set_clauses = ", ".join([f"{key} = :{key}" for key in user_data.keys()])
-        
+
         # Crear la consulta SQL con text()
         sentencia = text(f"""
             UPDATE instructor 
             SET {set_clauses}   
             WHERE id_instructor = :id_instructor
         """)
-        
+
         # Agregar el id_instructor al diccionario de parámetros
         user_data["id_instructor"] = user_id
-        
+
         # Ejecutar la consulta
         result = db.execute(sentencia, user_data)
-        
+
         # Confirmar los cambios en la base de datos
         db.commit()
-        
+
         # Retornar True si se actualizó al menos una fila, False si no
         return result.rowcount > 0
-        
+
     except Exception as e:
         # Revertir cualquier cambio pendiente
         db.rollback()
         # Registrar el error real para debugging
         print(f"ERROR REAL: {e}")
         # Lanzar una excepción con mensaje claro
-        raise Exception(f"Error de base de datos al actualizar el usuario con ID {user_id}: {str(e)}")
-    
+        raise Exception(
+            f"Error de base de datos al actualizar el usuario con ID {user_id}: {str(e)}"
+        )
+
+
 def get_user_by_id(db: Session, id: int):
     try:
         query = text("""
@@ -110,7 +119,8 @@ def get_user_by_id(db: Session, id: int):
     except Exception as e:
         logger.error(f"Error al obtener instructor por id: {e}")
         raise Exception("Error de base de datos al obtener el instructor")
-    
+
+
 def get_instructor_with_contactos(db: Session, id_instructor: int):
     try:
         query = text("""
@@ -133,18 +143,13 @@ def get_instructor_with_contactos(db: Session, id_instructor: int):
             WHERE i.id_instructor = :id_instructor
         """)
 
-        return db.execute(
-            query,
-            {"id_instructor": id_instructor}
-        ).mappings().all()
+        return db.execute(query, {"id_instructor": id_instructor}).mappings().all()
 
     except Exception as e:
         raise Exception("Error al obtener instructor con contactos")
-    
-def get_instructores_by_supervisor(
-    db: Session,
-    id_supervisor: int
-):
+
+
+def get_instructores_by_supervisor(db: Session, id_supervisor: int):
     query = text("""
         SELECT 
             i.id_instructor,
@@ -163,16 +168,10 @@ def get_instructores_by_supervisor(
         ORDER BY i.nombres
     """)
 
-    return db.execute(
-        query,
-        {"id_supervisor": id_supervisor}
-    ).mappings().all()
+    return db.execute(query, {"id_supervisor": id_supervisor}).mappings().all()
 
-def get_all_instructores_paginated(
-    db: Session,
-    page: int = 1,
-    size: int = 10
-):
+
+def get_all_instructores_paginated(db: Session, page: int = 1, size: int = 10):
     try:
         offset = (page - 1) * size
 
@@ -212,18 +211,13 @@ def get_all_instructores_paginated(
             LIMIT :limit OFFSET :offset
         """)
 
-        result = db.execute(
-            query,
-            {
-                "limit": size,
-                "offset": offset
-            }
-        ).mappings().all()
+        result = db.execute(query, {"limit": size, "offset": offset}).mappings().all()
         return result
 
     except Exception as e:
         logger.error(f"Error al obtener instructores paginados: {e}")
         raise Exception("Error de base de datos al obtener instructores")
+
 
 def count_instructores(db: Session):
     query = text("SELECT COUNT(*) as total FROM instructor")
@@ -238,10 +232,7 @@ def delete_instructor(db: Session, id_instructor: int) -> bool:
             WHERE id_instructor = :id_instructor
         """)
 
-        result = db.execute(
-            query,
-            {"id_instructor": id_instructor}
-        )
+        result = db.execute(query, {"id_instructor": id_instructor})
         db.commit()
 
         return result.rowcount > 0

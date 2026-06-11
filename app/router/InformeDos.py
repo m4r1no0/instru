@@ -1,6 +1,6 @@
 from pathlib import Path
 import tempfile
-import os 
+import os
 from docxtpl import DocxTemplate
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import FileResponse
@@ -18,11 +18,9 @@ TEMPLATE_PATH = BASE_DIR / "templates" / "contrato_template_acta.docx"
 print(TEMPLATE_PATH)
 print("EXISTE:", TEMPLATE_PATH.exists())
 
+
 @router.get("/contratoDos/{id_contrato}")
-def generar_informe_contrato(
-    id_contrato: int,
-    db: Session = Depends(get_db)
-):
+def generar_informe_contrato(id_contrato: int, db: Session = Depends(get_db)):
 
     data = contrato.get_contrato_informe(db, id_contrato)
 
@@ -45,5 +43,5 @@ def generar_informe_contrato(
     return FileResponse(
         tmp_file.name,
         filename=f"Contrato_acta_{id_contrato}.docx",
-        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     )

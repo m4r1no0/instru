@@ -50,10 +50,7 @@ def get_proceso_by_id(db: Session, id_proceso: int):
             WHERE id_proceso = :id_proceso
         """)
 
-        return db.execute(
-            query,
-            {"id_proceso": id_proceso}
-        ).mappings().first()
+        return db.execute(query, {"id_proceso": id_proceso}).mappings().first()
 
     except Exception as e:
         raise Exception("Error de base de datos")
@@ -95,10 +92,7 @@ def get_procesos_by_contrato(db: Session, id_contrato: int):
             WHERE id_contrato = :id_contrato
         """)
 
-        return db.execute(
-            query,
-            {"id_contrato": id_contrato}
-        ).mappings().all()
+        return db.execute(query, {"id_contrato": id_contrato}).mappings().all()
 
     except Exception as e:
         raise Exception("Error de base de datos")
@@ -107,20 +101,14 @@ def get_procesos_by_contrato(db: Session, id_contrato: int):
 # =====================================
 # ACTUALIZAR
 # =====================================
-def update_proceso(
-    db: Session,
-    id_proceso: int,
-    proceso: ProcesoUpdate
-) -> bool:
+def update_proceso(db: Session, id_proceso: int, proceso: ProcesoUpdate) -> bool:
     try:
         proceso_data = proceso.model_dump(exclude_unset=True)
 
         if not proceso_data:
             return False
 
-        set_clause = ", ".join(
-            [f"{key} = :{key}" for key in proceso_data.keys()]
-        )
+        set_clause = ", ".join([f"{key} = :{key}" for key in proceso_data.keys()])
 
         query = text(f"""
             UPDATE proceso
@@ -150,10 +138,7 @@ def delete_proceso(db: Session, id_proceso: int) -> bool:
             WHERE id_proceso = :id_proceso
         """)
 
-        result = db.execute(
-            query,
-            {"id_proceso": id_proceso}
-        )
+        result = db.execute(query, {"id_proceso": id_proceso})
         db.commit()
 
         return result.rowcount > 0

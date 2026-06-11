@@ -26,10 +26,7 @@ def get_poliza_by_numero(db: Session, numero: str):
         FROM poliza
         WHERE numero_poliza = :numero
     """)
-    return db.execute(
-        query,
-        {"numero": numero}
-    ).mappings().first()
+    return db.execute(query, {"numero": numero}).mappings().first()
 
 
 # =====================================
@@ -114,20 +111,13 @@ def get_polizas_by_instructor(db: Session, id_instructor: int):
         ORDER BY fecha_inicio DESC
     """)
 
-    return db.execute(
-        query,
-        {"id_instructor": id_instructor}
-    ).mappings().all()
+    return db.execute(query, {"id_instructor": id_instructor}).mappings().all()
 
 
 # =====================================
 # ACTUALIZAR
 # =====================================
-def update_poliza(
-    db: Session,
-    id_poliza: int,
-    poliza: PolizaUpdate
-) -> bool:
+def update_poliza(db: Session, id_poliza: int, poliza: PolizaUpdate) -> bool:
 
     poliza_data = poliza.model_dump(exclude_unset=True)
 
@@ -135,13 +125,9 @@ def update_poliza(
         return False
 
     if "fecha_fin" in poliza_data:
-        poliza_data["estado"] = calcular_estado(
-            poliza_data["fecha_fin"]
-        )
+        poliza_data["estado"] = calcular_estado(poliza_data["fecha_fin"])
 
-    set_clause = ", ".join(
-        [f"{key} = :{key}" for key in poliza_data.keys()]
-    )
+    set_clause = ", ".join([f"{key} = :{key}" for key in poliza_data.keys()])
 
     query = text(f"""
         UPDATE poliza
@@ -166,10 +152,7 @@ def delete_poliza(db: Session, id_poliza: int) -> bool:
         WHERE id_poliza = :id_poliza
     """)
 
-    result = db.execute(
-        query,
-        {"id_poliza": id_poliza}
-    )
+    result = db.execute(query, {"id_poliza": id_poliza})
 
     db.commit()
 

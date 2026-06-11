@@ -46,10 +46,7 @@ def get_direccion_by_id(db: Session, id_direccion: int):
             WHERE id_direccion = :id_direccion
         """)
 
-        return db.execute(
-            query,
-            {"id_direccion": id_direccion}
-        ).mappings().first()
+        return db.execute(query, {"id_direccion": id_direccion}).mappings().first()
 
     except Exception as e:
         logger.error(f"Error al obtener dirección: {e}")
@@ -67,10 +64,7 @@ def get_direcciones_by_instructor(db: Session, id_instructor: int):
             WHERE id_instructor = :id_instructor
         """)
 
-        return db.execute(
-            query,
-            {"id_instructor": id_instructor}
-        ).mappings().all()
+        return db.execute(query, {"id_instructor": id_instructor}).mappings().all()
 
     except Exception as e:
         logger.error(f"Error al listar direcciones: {e}")
@@ -81,9 +75,7 @@ def get_direcciones_by_instructor(db: Session, id_instructor: int):
 # ACTUALIZAR
 # ======================================
 def update_direccion(
-    db: Session,
-    id_direccion: int,
-    direccion: DireccionUpdate
+    db: Session, id_direccion: int, direccion: DireccionUpdate
 ) -> bool:
     try:
         direccion_data = direccion.model_dump(exclude_unset=True)
@@ -91,9 +83,7 @@ def update_direccion(
         if not direccion_data:
             return False
 
-        set_clause = ", ".join(
-            [f"{key} = :{key}" for key in direccion_data.keys()]
-        )
+        set_clause = ", ".join([f"{key} = :{key}" for key in direccion_data.keys()])
 
         query = text(f"""
             UPDATE direccion
@@ -124,10 +114,7 @@ def delete_direccion(db: Session, id_direccion: int) -> bool:
             WHERE id_direccion = :id_direccion
         """)
 
-        result = db.execute(
-            query,
-            {"id_direccion": id_direccion}
-        )
+        result = db.execute(query, {"id_direccion": id_direccion})
 
         db.commit()
         return result.rowcount > 0
@@ -137,13 +124,14 @@ def delete_direccion(db: Session, id_direccion: int) -> bool:
         logger.error(f"Error al eliminar dirección: {e}")
         raise Exception("Error de base de datos")
 
+
 # ======================================
 # OBTENER TODAS LAS DIRECCIONES
 # ======================================
 def get_all_direcciones(db: Session) -> Optional[List[dict]]:
     """
     Obtiene todas las direcciones usando SQL raw
-    
+
     Returns:
         List[dict]: Lista de direcciones o None si hay error
     """
@@ -164,17 +152,17 @@ def get_all_direcciones(db: Session) -> Optional[List[dict]]:
         """)
 
         result = db.execute(query).mappings().all()
-        
+
         # No hacer commit en SELECT
         # db.commit()  # ← ELIMINAR ESTO
-        
+
         logger.info(f"Se encontraron {len(result)} direcciones")
         return result
 
     except Exception as e:
         # No hacer rollback en SELECT
         # db.rollback()  # ← ELIMINAR ESTO
-        
+
         logger.error(f"Error al cargar direcciones: {e}")
         # Devolver lista vacía en lugar de lanzar excepción
         return []

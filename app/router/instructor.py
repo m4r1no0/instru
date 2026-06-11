@@ -4,7 +4,12 @@ from typing import Optional
 
 from core.database import get_db
 from app.router.dependencies import get_current_user
-from app.schemas.instructor import InstructorCreate, InstructorOut, InstructorUpdate, InstructorBase
+from app.schemas.instructor import (
+    InstructorCreate,
+    InstructorOut,
+    InstructorUpdate,
+    InstructorBase,
+)
 from app.crud.instructor import (
     create_instructor,
     get_user_by_id,
@@ -14,7 +19,7 @@ from app.crud.instructor import (
     get_all_instructores_paginated,
     count_instructores,
     update_user_by_id,
-    delete_instructor
+    delete_instructor,
 )
 
 router = APIRouter()
@@ -23,22 +28,22 @@ router = APIRouter()
 # CREAR INSTRUCTOR
 # =====================================================
 
+
 @router.post("/create", status_code=status.HTTP_201_CREATED)
-def crear_instructor(
-    instructor: InstructorCreate,
-    db: Session = Depends(get_db)
-):
+def crear_instructor(instructor: InstructorCreate, db: Session = Depends(get_db)):
     return create_instructor(db, instructor)
+
 
 # =====================================================
 # OBTENER INSTRUCTOR POR ID
 # =====================================================
 
+
 @router.get("/{id_instructor}")
 def obtener_instructor(
     id_instructor: int,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_user),
 ):
     instructor = get_user_by_id(db, id_instructor)
 
@@ -47,15 +52,17 @@ def obtener_instructor(
 
     return instructor
 
+
 # =====================================================
 # OBTENER INSTRUCTOR CON CONTACTOS
 # =====================================================
+
 
 @router.get("/{id_instructor}/contactos")
 def obtener_con_contactos(
     id_instructor: int,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_user),
 ):
     result = get_instructor_with_contactos(db, id_instructor)
 
@@ -64,28 +71,32 @@ def obtener_con_contactos(
 
     return result
 
+
 # =====================================================
 # OBTENER INSTRUCTORES POR SUPERVISOR
 # =====================================================
+
 
 @router.get("/supervisor/{id_supervisor}")
 def listar_por_supervisor(
     id_supervisor: int,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_user),
 ):
     return get_instructores_by_supervisor(db, id_supervisor)
+
 
 # =====================================================
 # LISTAR CON PAGINACIÓN
 # =====================================================
+
 
 @router.get("/")
 def listar_instructores(
     page: int = Query(1, ge=1),
     size: int = Query(10, ge=1, le=200),
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_user),
 ):
     data = get_all_instructores_paginated(db, page, size)
     total = count_instructores(db)
@@ -95,26 +106,27 @@ def listar_instructores(
         "size": size,
         "total": total,
         "total_pages": (total + size - 1) // size,
-        "data": data
+        "data": data,
     }
+
 
 # =====================================================
 # ACTUALIZAR INSTRUCTOR
 # =====================================================
+
 
 @router.put("/{id_instructor}")
 def actualizar_instructor(
     id_instructor: int,
     instructor: InstructorUpdate,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_user),
 ):
     updated = update_user_by_id(db, id_instructor, instructor)
 
     if not updated:
         raise HTTPException(
-            status_code=404,
-            detail="Instructor no encontrado o sin cambios"
+            status_code=404, detail="Instructor no encontrado o sin cambios"
         )
 
     return {"message": "Instructor actualizado correctamente"}
@@ -122,16 +134,12 @@ def actualizar_instructor(
 
 @router.delete("/delete/{id_instructor}", response_model=dict)
 def delete_instructor_by_id(  # ← Nombre diferente al importado
-    id_instructor: int,
-    db: Session = Depends(get_db)
+    id_instructor: int, db: Session = Depends(get_db)
 ):
     # Usar la función importada
     deleted = delete_instructor(db, id_instructor)
-    
+
     if not deleted:
-        raise HTTPException(
-            status_code=404,
-            detail="Instructor no encontrado"
-        )
-    
+        raise HTTPException(status_code=404, detail="Instructor no encontrado")
+
     return {"message": "Instructor eliminado correctamente"}

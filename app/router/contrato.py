@@ -8,7 +8,7 @@ from app.schemas.contrato import (
     ContratoInstructorPago,
     ContratoUpdate,
     ContratoOut,
-    InstructorContratoOut
+    InstructorContratoOut,
 )
 from app.crud import contrato as contrato_crud
 
@@ -19,31 +19,20 @@ router = APIRouter()
 # CREAR CONTRATO
 # ======================================
 @router.post("/create")
-def create_contrato(
-    contrato: ContratoCreate,
-    db: Session = Depends(get_db)
-):
+def create_contrato(contrato: ContratoCreate, db: Session = Depends(get_db)):
     created = contrato_crud.create_contrato(db, contrato)
 
     if not created:
-        raise HTTPException(
-            status_code=400,
-            detail="No se pudo crear el contrato"
-        )
+        raise HTTPException(status_code=400, detail="No se pudo crear el contrato")
 
     return {"message": "Contrato creado correctamente"}
-
 
 
 @router.get("/instructores_contratos", response_model=dict)
 def get_contrato_with_instructor(db: Session = Depends(get_db)):
     try:
         result = contrato_crud.get_contrato_instructor(db)
-        return {
-            "status": "success",
-            "data": result,
-            "total": len(result)
-        }
+        return {"status": "success", "data": result, "total": len(result)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -51,60 +40,36 @@ def get_contrato_with_instructor(db: Session = Depends(get_db)):
 # ======================================
 # LISTAR CONTRATOS POR INSTRUCTOR
 # ======================================
-@router.get(
-    "/pagos",
-    response_model=List[ContratoInstructorPago]
-)
-def get_contratos_by_instructor(
-    db: Session = Depends(get_db)
-):
+@router.get("/pagos", response_model=List[ContratoInstructorPago])
+def get_contratos_by_instructor(db: Session = Depends(get_db)):
     return contrato_crud.get_contratos_by_instructor(db)
+
 
 # ======================================
 # OBTENER CONTRATO POR ID
 # ======================================
-@router.get(
-    "/{id_contrato}",
-    response_model=ContratoOut
-)
-def get_contrato(
-    id_contrato: int,
-    db: Session = Depends(get_db)
-):
+@router.get("/{id_contrato}", response_model=ContratoOut)
+def get_contrato(id_contrato: int, db: Session = Depends(get_db)):
     contrato = contrato_crud.get_contrato_by_id(db, id_contrato)
 
     if not contrato:
-        raise HTTPException(
-            status_code=404,
-            detail="Contrato no encontrado"
-        )
+        raise HTTPException(status_code=404, detail="Contrato no encontrado")
 
     return contrato
-
 
 
 # ======================================
 # ACTUALIZAR CONTRATO
 # ======================================
-@router.put(
-    "/{id_contrato}",
-    response_model=dict
-)
+@router.put("/{id_contrato}", response_model=dict)
 def update_contrato(
-    id_contrato: int,
-    contrato: ContratoUpdate,
-    db: Session = Depends(get_db)
+    id_contrato: int, contrato: ContratoUpdate, db: Session = Depends(get_db)
 ):
-    updated = contrato_crud.update_contrato(
-        db,
-        id_contrato,
-        contrato
-    )
+    updated = contrato_crud.update_contrato(db, id_contrato, contrato)
 
     if not updated:
         raise HTTPException(
-            status_code=404,
-            detail="Contrato no encontrado o sin cambios"
+            status_code=404, detail="Contrato no encontrado o sin cambios"
         )
 
     return {"message": "Contrato actualizado correctamente"}
@@ -113,25 +78,11 @@ def update_contrato(
 # ======================================
 # ELIMINAR CONTRATO
 # ======================================
-@router.delete(
-    "/{id_contrato}",
-    response_model=dict
-)
-def delete_contrato(
-    id_contrato: int,
-    db: Session = Depends(get_db)
-):
-    deleted = contrato_crud.delete_contrato(
-        db,
-        id_contrato
-    )
+@router.delete("/{id_contrato}", response_model=dict)
+def delete_contrato(id_contrato: int, db: Session = Depends(get_db)):
+    deleted = contrato_crud.delete_contrato(db, id_contrato)
 
     if not deleted:
-        raise HTTPException(
-            status_code=404,
-            detail="Contrato no encontrado"
-        )
+        raise HTTPException(status_code=404, detail="Contrato no encontrado")
 
     return {"message": "Contrato eliminado correctamente"}
-
-

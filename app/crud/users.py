@@ -8,6 +8,7 @@ from core.security import get_hashed_password
 
 logger = logging.getLogger(__name__)
 
+
 # ===============================
 # CREAR USUARIO
 # ===============================
@@ -55,6 +56,7 @@ def create_user(db: Session, user: UserCreate):
         db.rollback()
         logger.error(f"Error al crear usuario: {e}")
         raise Exception("Error de base de datos al crear el usuario")
+
 
 # ===============================
 # LOGIN (CON HASH)
@@ -174,6 +176,7 @@ def update_user_by_id(db: Session, user_id: int, user: UserUpdate) -> Optional[b
         db.rollback()
         logger.error(f"Error al actualizar usuario: {e}")
         raise Exception("Error de base de datos al actualizar el usuario")
+
 
 # ===============================
 # LISTAR TODOS LOS USUARIOS

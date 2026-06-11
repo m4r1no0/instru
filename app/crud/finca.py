@@ -6,8 +6,8 @@ import logging
 from app.schemas.users import UserCreate, UserUpdate
 from core.security import get_hashed_password
 
-
 logger = logging.getLogger(__name__)
+
 
 def create_user(db: Session, user: UserCreate) -> Optional[bool]:
     try:

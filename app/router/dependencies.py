@@ -14,9 +14,9 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/access/login")
 # OBTENER USUARIO ACTUAL DESDE TOKEN
 # ===================================
 
+
 def get_current_user(
-    token: str = Depends(oauth2_scheme),
-    db: Session = Depends(get_db)
+    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
 ):
     # Verificar token y obtener ID
     user_id = verify_token(token)
@@ -39,8 +39,7 @@ def get_current_user(
 
     if not user:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Usuario no encontrado"
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Usuario no encontrado"
         )
 
     return dict(user._mapping)
@@ -50,12 +49,14 @@ def get_current_user(
 # DEPENDENCIA PARA ROLES
 # ===================================
 
+
 def require_role(role_name: str):
     def role_dependency(current_user: dict = Depends(get_current_user)):
         if current_user["nombre_rol"] != role_name:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="No tienes permisos para acceder a este recurso"
+                detail="No tienes permisos para acceder a este recurso",
             )
         return current_user
+
     return role_dependency

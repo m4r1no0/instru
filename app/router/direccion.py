@@ -3,13 +3,8 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from core.database import get_db
-from app.schemas.direccion import (
-    DireccionCreate,
-    DireccionUpdate,
-    DireccionOut
-)
+from app.schemas.direccion import DireccionCreate, DireccionUpdate, DireccionOut
 from app.crud import direccion as direccion_crud
-
 
 router = APIRouter()
 
@@ -18,9 +13,7 @@ router = APIRouter()
 # LISTAR TODAS LAS DIRECCIONES (DEBE IR PRIMERO)
 # ======================================
 @router.get("/all", response_model=List[DireccionOut])
-def get_all_direcciones(
-    db: Session = Depends(get_db)
-):
+def get_all_direcciones(db: Session = Depends(get_db)):
     """
     Obtiene todas las direcciones
     """
@@ -32,10 +25,7 @@ def get_all_direcciones(
 # LISTAR POR INSTRUCTOR (ESPECÍFICO)
 # ======================================
 @router.get("/instructor/{id_instructor}", response_model=List[DireccionOut])
-def get_direcciones_by_instructor(
-    id_instructor: int,
-    db: Session = Depends(get_db)
-):
+def get_direcciones_by_instructor(id_instructor: int, db: Session = Depends(get_db)):
     return direccion_crud.get_direcciones_by_instructor(db, id_instructor)
 
 
@@ -43,17 +33,11 @@ def get_direcciones_by_instructor(
 # OBTENER POR ID (DEBE IR DESPUÉS DE RUTAS ESPECÍFICAS)
 # ======================================
 @router.get("/{id_direccion}", response_model=DireccionOut)
-def get_direccion(
-    id_direccion: int,
-    db: Session = Depends(get_db)
-):
+def get_direccion(id_direccion: int, db: Session = Depends(get_db)):
     direccion = direccion_crud.get_direccion_by_id(db, id_direccion)
 
     if not direccion:
-        raise HTTPException(
-            status_code=404,
-            detail="Dirección no encontrada"
-        )
+        raise HTTPException(status_code=404, detail="Dirección no encontrada")
 
     return direccion
 
@@ -62,15 +46,9 @@ def get_direccion(
 # CREAR
 # ======================================
 @router.post("/create", status_code=status.HTTP_201_CREATED)
-def create_direccion(
-    direccion: DireccionCreate,
-    db: Session = Depends(get_db)
-):
+def create_direccion(direccion: DireccionCreate, db: Session = Depends(get_db)):
     if not direccion_crud.create_direccion(db, direccion):
-        raise HTTPException(
-            status_code=400,
-            detail="No se pudo crear la dirección"
-        )
+        raise HTTPException(status_code=400, detail="No se pudo crear la dirección")
 
     return {"message": "Dirección creada correctamente"}
 
@@ -80,16 +58,13 @@ def create_direccion(
 # ======================================
 @router.put("/{id_direccion}")
 def update_direccion(
-    id_direccion: int,
-    direccion: DireccionUpdate,
-    db: Session = Depends(get_db)
+    id_direccion: int, direccion: DireccionUpdate, db: Session = Depends(get_db)
 ):
     updated = direccion_crud.update_direccion(db, id_direccion, direccion)
 
     if not updated:
         raise HTTPException(
-            status_code=404,
-            detail="Dirección no encontrada o sin cambios"
+            status_code=404, detail="Dirección no encontrada o sin cambios"
         )
 
     return {"message": "Dirección actualizada correctamente"}
@@ -99,16 +74,10 @@ def update_direccion(
 # ELIMINAR
 # ======================================
 @router.delete("/{id_direccion}")
-def delete_direccion(
-    id_direccion: int,
-    db: Session = Depends(get_db)
-):
+def delete_direccion(id_direccion: int, db: Session = Depends(get_db)):
     deleted = direccion_crud.delete_direccion(db, id_direccion)
 
     if not deleted:
-        raise HTTPException(
-            status_code=404,
-            detail="Dirección no encontrada"
-        )
+        raise HTTPException(status_code=404, detail="Dirección no encontrada")
 
     return {"message": "Dirección eliminada correctamente"}

@@ -6,21 +6,29 @@ from datetime import date, datetime
 from pydantic import BaseModel, Field, field_validator
 from decimal import Decimal
 
+
 class PagoBase(BaseModel):
     id_contrato: int = Field(gt=0, description="ID del contrato")
     mes: str = Field(..., max_length=20, description="Mes en formato YYYY-MM")
-    valor_base: Decimal = Field(..., gt=0, decimal_places=2, description="Valor base del mes")
-    ajuste: Optional[Decimal] = Field(0, decimal_places=2, description="Ajuste (bono/descuento)")
-    valor_pagado: Decimal = Field(..., ge=0, decimal_places=2, description="Valor pagado")
+    valor_base: Decimal = Field(
+        ..., gt=0, decimal_places=2, description="Valor base del mes"
+    )
+    ajuste: Optional[Decimal] = Field(
+        0, decimal_places=2, description="Ajuste (bono/descuento)"
+    )
+    valor_pagado: Decimal = Field(
+        ..., ge=0, decimal_places=2, description="Valor pagado"
+    )
     saldo: Optional[Decimal] = Field(0, decimal_places=2, description="Saldo pendiente")
 
     @field_validator("mes")
     @classmethod
     def validar_mes(cls, v):
         import re
+
         if not re.match(r"^\d{4}-\d{2}$", v):
             raise ValueError("El mes debe tener formato YYYY-MM (ej: 2024-10)")
-        año, mes = map(int, v.split('-'))
+        año, mes = map(int, v.split("-"))
         if mes < 1 or mes > 12:
             raise ValueError("El mes debe estar entre 01 y 12")
         return v
@@ -32,11 +40,13 @@ class PagoBase(BaseModel):
             raise ValueError("El valor pagado no puede ser negativo")
         return v
 
+
 # =====================================
 # CREAR
 # =====================================
 class PagoCreate(PagoBase):
     pass
+
 
 # =====================================
 # ACTUALIZAR
@@ -54,12 +64,14 @@ class PagoUpdate(BaseModel):
     def validar_mes(cls, v):
         if v:
             import re
+
             if not re.match(r"^\d{4}-\d{2}$", v):
                 raise ValueError("El mes debe tener formato YYYY-MM (ej: 2024-10)")
-            año, mes = map(int, v.split('-'))
+            año, mes = map(int, v.split("-"))
             if mes < 1 or mes > 12:
                 raise ValueError("El mes debe estar entre 01 y 12")
         return v
+
 
 # =====================================
 # RESPUESTA
@@ -75,9 +87,10 @@ class PagoOut(BaseModel):
     valor_pagado: Decimal
     saldo: Decimal
     created_at: Optional[datetime] = None
-    
+
     class Config:
         from_attributes = True
+
 
 # =====================================
 # REPORTES
@@ -90,6 +103,7 @@ class ReportePagosPorInstructor(BaseModel):
     total_ajustes: Decimal
     total_pagado: Decimal
     total_saldo: Decimal
+
 
 class ReportePagosPorMes(BaseModel):
     mes: str

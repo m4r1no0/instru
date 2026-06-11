@@ -7,6 +7,7 @@ from app.schemas.contacto import ContactoCreate, ContactoUpdate
 
 logger = logging.getLogger(__name__)
 
+
 # =====================================
 # LISTAR POR INSTRUCTOR
 # =====================================
@@ -25,13 +26,11 @@ def get_all_contactos(db: Session) -> Optional[List[dict]]:
                         ORDER BY i.id_instructor;
         """)
 
-        result = db.execute(
-                query).mappings().all()
+        result = db.execute(query).mappings().all()
         return result
     except Exception as e:
         logger.error(f"Error al listar contactos: {e}")
         raise Exception("Error de base de datos")
-
 
 
 # =====================================
@@ -74,10 +73,7 @@ def get_contacto_by_id(db: Session, id_contacto: int):
             WHERE id_contacto = :id_contacto
         """)
 
-        return db.execute(
-            query,
-            {"id_contacto": id_contacto}
-        ).mappings().first()
+        return db.execute(query, {"id_contacto": id_contacto}).mappings().first()
 
     except Exception as e:
         logger.error(f"Error al obtener contacto: {e}")
@@ -87,20 +83,14 @@ def get_contacto_by_id(db: Session, id_contacto: int):
 # =====================================
 # ACTUALIZAR
 # =====================================
-def update_contacto(
-    db: Session,
-    id_contacto: int,
-    contacto: ContactoUpdate
-) -> bool:
+def update_contacto(db: Session, id_contacto: int, contacto: ContactoUpdate) -> bool:
     try:
         contacto_data = contacto.model_dump(exclude_unset=True)
 
         if not contacto_data:
             return False
 
-        set_clause = ", ".join(
-            [f"{key} = :{key}" for key in contacto_data.keys()]
-        )
+        set_clause = ", ".join([f"{key} = :{key}" for key in contacto_data.keys()])
 
         query = text(f"""
             UPDATE contacto
@@ -131,10 +121,7 @@ def delete_contacto(db: Session, id_contacto: int) -> bool:
             WHERE id_contacto = :id_contacto
         """)
 
-        result = db.execute(
-            query,
-            {"id_contacto": id_contacto}
-        )
+        result = db.execute(query, {"id_contacto": id_contacto})
         db.commit()
 
         return result.rowcount > 0

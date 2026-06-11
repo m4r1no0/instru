@@ -54,4 +54,3 @@ def get_all_cesiones(db: Session):
         ORDER BY c.fecha_cesion DESC
     """)
     return db.execute(query).mappings().all()
-    

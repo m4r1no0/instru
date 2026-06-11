@@ -8,7 +8,7 @@ from sqlalchemy import text
 from core.security import (
     verify_password,
     create_access_token,
-    ACCESS_TOKEN_EXPIRE_MINUTES
+    ACCESS_TOKEN_EXPIRE_MINUTES,
 )
 from core.database import get_db  # Ajusta si tu conexión tiene otro nombre
 
@@ -17,8 +17,7 @@ router = APIRouter()
 
 @router.post("/login")
 def login(
-    form_data: OAuth2PasswordRequestForm = Depends(),
-    db: Session = Depends(get_db)
+    form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
 ):
     # ==============================
     # BUSCAR USUARIO POR EMAIL
@@ -44,8 +43,7 @@ def login(
 
     if not user:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Credenciales incorrectas"
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Credenciales incorrectas"
         )
 
     # Convertir a diccionario
@@ -56,8 +54,7 @@ def login(
     # ==============================
     if not verify_password(form_data.password, user["pass_hash"]):
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Credenciales incorrectas"
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Credenciales incorrectas"
         )
 
     # ==============================
@@ -66,8 +63,7 @@ def login(
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
     access_token = create_access_token(
-        data={"sub": str(user["id_usuario"])},
-        expires_delta=access_token_expires
+        data={"sub": str(user["id_usuario"])}, expires_delta=access_token_expires
     )
 
     # ==============================
@@ -80,6 +76,6 @@ def login(
             "id_usuario": user["id_usuario"],
             "nombre": user["nombre"],
             "email": user["email"],
-            "rol": user["nombre_rol"]
-        }
+            "rol": user["nombre_rol"],
+        },
     }

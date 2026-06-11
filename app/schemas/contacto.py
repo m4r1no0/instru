@@ -1,7 +1,7 @@
 # =====================================#
 # BASE
 # =====================================#
-from typing import  Optional
+from typing import Optional
 from pydantic import BaseModel, Field
 
 
@@ -10,6 +10,7 @@ class ContactoBase(BaseModel):
     correo_personal: Optional[str] = None  # Usar EmailStr para validación
     correo_institucional: Optional[str] = None
     telefono: Optional[str] = None
+
 
 # =====================================
 # CREAR
@@ -34,6 +35,6 @@ class ContactoOut(BaseModel):
     correo_personal: Optional[str] = None
     correo_institucional: Optional[str] = None
     telefono: Optional[str] = None
-    
+
     class Config:
         from_attributes = True

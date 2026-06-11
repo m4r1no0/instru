@@ -44,4 +44,3 @@ class CesionWithRelations(BaseModel):
     fecha_incio: Optional[date] = None
     fecha_cesion: Optional[date] = None
     fecha_modificacion: Optional[date] = None
-

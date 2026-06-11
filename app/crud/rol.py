@@ -37,10 +37,7 @@ def get_rol_by_id(db: Session, id_rol: int):
         WHERE id_rol = :id_rol
     """)
 
-    return db.execute(
-        query,
-        {"id_rol": id_rol}
-    ).mappings().first()
+    return db.execute(query, {"id_rol": id_rol}).mappings().first()
 
 
 # =====================================
@@ -59,20 +56,14 @@ def get_all_roles(db: Session):
 # =====================================
 # ACTUALIZAR
 # =====================================
-def update_rol(
-    db: Session,
-    id_rol: int,
-    rol: RolUpdate
-) -> bool:
+def update_rol(db: Session, id_rol: int, rol: RolUpdate) -> bool:
 
     rol_data = rol.model_dump(exclude_unset=True)
 
     if not rol_data:
         return False
 
-    set_clause = ", ".join(
-        [f"{key} = :{key}" for key in rol_data.keys()]
-    )
+    set_clause = ", ".join([f"{key} = :{key}" for key in rol_data.keys()])
 
     query = text(f"""
         UPDATE rol
@@ -97,10 +88,7 @@ def delete_rol(db: Session, id_rol: int) -> bool:
         WHERE id_rol = :id_rol
     """)
 
-    result = db.execute(
-        query,
-        {"id_rol": id_rol}
-    )
+    result = db.execute(query, {"id_rol": id_rol})
 
     db.commit()
 

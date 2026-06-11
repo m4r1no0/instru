@@ -46,10 +46,7 @@ def get_programa_by_id(db: Session, id_programa: int):
         WHERE id_programa = :id_programa
     """)
 
-    return db.execute(
-        query,
-        {"id_programa": id_programa}
-    ).mappings().first()
+    return db.execute(query, {"id_programa": id_programa}).mappings().first()
 
 
 # =====================================
@@ -62,10 +59,7 @@ def get_programa_by_codigo(db: Session, codigo: str):
         WHERE codigo_programa = :codigo
     """)
 
-    return db.execute(
-        query,
-        {"codigo": codigo}
-    ).mappings().first()
+    return db.execute(query, {"codigo": codigo}).mappings().first()
 
 
 # =====================================
@@ -84,19 +78,13 @@ def get_all_programas(db: Session):
 # =====================================
 # ACTUALIZAR
 # =====================================
-def update_programa(
-    db: Session,
-    id_programa: int,
-    programa: ProgramaUpdate
-) -> bool:
+def update_programa(db: Session, id_programa: int, programa: ProgramaUpdate) -> bool:
     programa_data = programa.model_dump(exclude_unset=True)
 
     if not programa_data:
         return False
 
-    set_clause = ", ".join(
-        [f"{key} = :{key}" for key in programa_data.keys()]
-    )
+    set_clause = ", ".join([f"{key} = :{key}" for key in programa_data.keys()])
 
     query = text(f"""
         UPDATE programa_formacion
@@ -121,10 +109,7 @@ def delete_programa(db: Session, id_programa: int) -> bool:
         WHERE id_programa = :id_programa
     """)
 
-    result = db.execute(
-        query,
-        {"id_programa": id_programa}
-    )
+    result = db.execute(query, {"id_programa": id_programa})
     db.commit()
 
     return result.rowcount > 0

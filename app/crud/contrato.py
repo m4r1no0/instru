@@ -1,11 +1,12 @@
-from sqlalchemy.orm import Session # pyright: ignore[reportMissingImports]
-from sqlalchemy import text # type: ignore
+from sqlalchemy.orm import Session  # pyright: ignore[reportMissingImports]
+from sqlalchemy import text  # type: ignore
 from typing import List, Optional
 import logging
 
 from app.schemas.contrato import ContratoCreate, ContratoUpdate
 
 logger = logging.getLogger(__name__)
+
 
 # ==============================
 # CREAR CONTRATO
@@ -69,15 +70,11 @@ def get_contrato_by_id(db: Session, id_contrato: int):
             WHERE id_contrato = :id_contrato
         """)
 
-        return db.execute(
-            query,
-            {"id_contrato": id_contrato}
-        ).mappings().first()
+        return db.execute(query, {"id_contrato": id_contrato}).mappings().first()
 
     except Exception as e:
         logger.error(f"Error al obtener contrato: {e}")
         raise Exception("Error de base de datos")
-
 
 
 # ==============================
@@ -115,20 +112,14 @@ def get_contratos_by_instructor(db: Session):
 # ==============================
 # ACTUALIZAR
 # ==============================
-def update_contrato(
-    db: Session,
-    id_contrato: int,
-    contrato: ContratoUpdate
-) -> bool:
+def update_contrato(db: Session, id_contrato: int, contrato: ContratoUpdate) -> bool:
     try:
         contrato_data = contrato.model_dump(exclude_unset=True)
 
         if not contrato_data:
             return False
 
-        set_clause = ", ".join(
-            [f"{key} = :{key}" for key in contrato_data.keys()]
-        )
+        set_clause = ", ".join([f"{key} = :{key}" for key in contrato_data.keys()])
 
         query = text(f"""
             UPDATE contrato
@@ -159,10 +150,7 @@ def delete_contrato(db: Session, id_contrato: int) -> bool:
             WHERE id_contrato = :id_contrato
         """)
 
-        result = db.execute(
-            query,
-            {"id_contrato": id_contrato}
-        )
+        result = db.execute(query, {"id_contrato": id_contrato})
         db.commit()
 
         return result.rowcount > 0
@@ -171,6 +159,7 @@ def delete_contrato(db: Session, id_contrato: int) -> bool:
         db.rollback()
         logger.error(f"Error al eliminar contrato: {e}")
         raise Exception("Error de base de datos")
+
 
 def get_contrato_informe(db: Session, id_contrato: int):
     query = text("""
@@ -198,12 +187,10 @@ def get_contrato_informe(db: Session, id_contrato: int):
         WHERE co.id_contrato = :id_contrato
     """)
 
-    result = db.execute(
-        query,
-        {"id_contrato": id_contrato}
-    ).mappings().first()
+    result = db.execute(query, {"id_contrato": id_contrato}).mappings().first()
 
     return dict(result) if result else None
+
 
 def get_contrato_instructor(db: Session):
     try:
@@ -236,18 +223,15 @@ def get_contrato_instructor(db: Session):
     except Exception as e:
         logger.error(f"Error al listar contratos: {e}")
         raise Exception("Error de base de datos")
-    
 
-def get_contrato_modificacion(db:Session, id_contrato: int):
+
+def get_contrato_modificacion(db: Session, id_contrato: int):
     try:
         query = text("""
             INSERT INTO cesion (
         """)
 
-        result = db.execute(
-            query,
-            {"id_contrato": id_contrato}
-        ).mappings().first()
+        result = db.execute(query, {"id_contrato": id_contrato}).mappings().first()
 
         return dict(result) if result else None
 

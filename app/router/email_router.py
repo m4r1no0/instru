@@ -7,9 +7,5 @@ router = APIRouter(prefix="/email", tags=["Email"])
 
 @router.post("/enviar")
 async def enviar_email(data: EmailSchema):
-    await enviar_correo(
-        data.destinatario,
-        data.asunto,
-        data.contenido
-    )
+    await enviar_correo(data.destinatario, data.asunto, data.contenido)
     return {"mensaje": "Correo enviado"}

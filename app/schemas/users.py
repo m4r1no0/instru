@@ -11,7 +11,7 @@ class UserBase(BaseModel):
     email: EmailStr
     telefono: str = Field(min_length=7, max_length=15)
     documento: str = Field(min_length=8, max_length=20)
-    estado: int   # Cambiado de bool a int (según tu BD)
+    estado: int  # Cambiado de bool a int (según tu BD)
 
 
 # ==========================

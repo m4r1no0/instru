@@ -2,10 +2,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 import logging
 
-from app.schemas.supervisor import (
-    SupervisorCreate,
-    SupervisorUpdate
-)
+from app.schemas.supervisor import SupervisorCreate, SupervisorUpdate
 
 logger = logging.getLogger(__name__)
 
@@ -13,10 +10,7 @@ logger = logging.getLogger(__name__)
 # =====================================
 # CREAR
 # =====================================
-def create_supervisor(
-    db: Session,
-    supervisor: SupervisorCreate
-) -> bool:
+def create_supervisor(db: Session, supervisor: SupervisorCreate) -> bool:
     try:
         query = text("""
             INSERT INTO supervisor (nombre, cedula)
@@ -36,20 +30,14 @@ def create_supervisor(
 # =====================================
 # OBTENER POR ID
 # =====================================
-def get_supervisor_by_id(
-    db: Session,
-    id_supervisor: int
-):
+def get_supervisor_by_id(db: Session, id_supervisor: int):
     query = text("""
         SELECT *
         FROM supervisor
         WHERE id_supervisor = :id_supervisor
     """)
 
-    return db.execute(
-        query,
-        {"id_supervisor": id_supervisor}
-    ).mappings().first()
+    return db.execute(query, {"id_supervisor": id_supervisor}).mappings().first()
 
 
 # =====================================
@@ -69,21 +57,15 @@ def get_all_supervisores(db: Session):
 # ACTUALIZAR
 # =====================================
 def update_supervisor(
-    db: Session,
-    id_supervisor: int,
-    supervisor: SupervisorUpdate
+    db: Session, id_supervisor: int, supervisor: SupervisorUpdate
 ) -> bool:
 
-    supervisor_data = supervisor.model_dump(
-        exclude_unset=True
-    )
+    supervisor_data = supervisor.model_dump(exclude_unset=True)
 
     if not supervisor_data:
         return False
 
-    set_clause = ", ".join(
-        [f"{key} = :{key}" for key in supervisor_data.keys()]
-    )
+    set_clause = ", ".join([f"{key} = :{key}" for key in supervisor_data.keys()])
 
     query = text(f"""
         UPDATE supervisor
@@ -102,20 +84,14 @@ def update_supervisor(
 # =====================================
 # ELIMINAR
 # =====================================
-def delete_supervisor(
-    db: Session,
-    id_supervisor: int
-) -> bool:
+def delete_supervisor(db: Session, id_supervisor: int) -> bool:
 
     query = text("""
         DELETE FROM supervisor
         WHERE id_supervisor = :id_supervisor
     """)
 
-    result = db.execute(
-        query,
-        {"id_supervisor": id_supervisor}
-    )
+    result = db.execute(query, {"id_supervisor": id_supervisor})
 
     db.commit()
 
