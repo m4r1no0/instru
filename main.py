@@ -43,7 +43,7 @@ app.include_router(email_router)
 def read_root():
     return {
         "message": "ok",
-        "autor": "Marino A Osorio D"
+        "autor": "Marino A Osorio D 2026"
     }
 # print("Rutas disponibles:")
 # for route in app.routes:
