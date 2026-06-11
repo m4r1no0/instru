@@ -48,3 +48,5 @@ def read_root():
 # print("Rutas disponibles:")
 # for route in app.routes:
 #     print(f"{route.methods} {route.path}")
+
+

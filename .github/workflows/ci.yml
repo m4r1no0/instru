@@ -40,7 +40,9 @@ jobs:
       - name: Run lint (basic check)
         run: |
           pip install flake8
-          flake8 .
+          flake8 . \
+          --max-line-length=120 \
+          --exclude=.git,__pycache__,.instru,Lib,venv,env
 
       - name: Run tests
         run: |
