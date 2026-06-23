@@ -26,7 +26,7 @@ def create_area(area: AreaFormacionCreate, db: Session = Depends(get_db)):
 # =====================================
 # LISTAR TODAS (CON PROGRAMA)
 # =====================================
-@router.get("/all", response_model=List[AreaFormacionWithPrograma])
+@router.get("/all", response_model=List[AreaFormacionOut])
 def get_all_areas(db: Session = Depends(get_db)):
     return area_crud.get_all_areas(db)
 

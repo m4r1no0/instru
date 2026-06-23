@@ -6,9 +6,9 @@ from typing import Optional
 # BASE
 # =====================================
 class AreaFormacionBase(BaseModel):
-    id_programa: int
-    nombre_area: str = Field(..., max_length=150)
-    objeto: Optional[str] = Field(default=None, max_length=100)
+    id_area: int
+    nombre_area: Optional[str] = Field(..., max_length=150)
+    objeto: Optional[str] = Field(default=None)
     descripcion: Optional[str] = None
 
 
@@ -24,7 +24,7 @@ class AreaFormacionCreate(AreaFormacionBase):
 # =====================================
 class AreaFormacionUpdate(BaseModel):
     nombre_area: Optional[str] = Field(default=None, max_length=150)
-    objeto: Optional[str] = Field(default=None, max_length=100)
+    objeto: Optional[str] = Field(default=None)
     descripcion: Optional[str] = None
 
 

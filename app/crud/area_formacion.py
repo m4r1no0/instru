@@ -14,12 +14,10 @@ def create_area_formacion(db: Session, area: AreaFormacionCreate) -> bool:
     try:
         query = text("""
             INSERT INTO area_formacion (
-                id_programa,
                 nombre_area,
                 objeto,
                 descripcion
             ) VALUES (
-                :id_programa,
                 :nombre_area,
                 :objeto,
                 :descripcion
@@ -54,34 +52,10 @@ def get_area_by_id(db: Session, id_area: int):
 # =====================================
 def get_all_areas(db: Session):
     query = text("""
-        SELECT 
-            a.id_area,
-            a.id_programa,
-            p.nombre_programa,
-            a.nombre_area,
-            a.objeto,
-            a.descripcion
-        FROM area_formacion a
-        JOIN programa_formacion p
-            ON a.id_programa = p.id_programa
-        ORDER BY a.nombre_area
+        SELECT * FROM area_formacion
     """)
 
     return db.execute(query).mappings().all()
-
-
-# =====================================
-# LISTAR POR PROGRAMA
-# =====================================
-def get_areas_by_programa(db: Session, id_programa: int):
-    query = text("""
-        SELECT *
-        FROM area_formacion
-        WHERE id_programa = :id_programa
-        ORDER BY nombre_area
-    """)
-
-    return db.execute(query, {"id_programa": id_programa}).mappings().all()
 
 
 # =====================================
