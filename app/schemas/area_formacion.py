@@ -37,6 +37,7 @@ class AreaFormacionOut(AreaFormacionBase):
     id_area: Optional[int] = None  # Cambiado a Optional
     id_instructor: int
     nombre: str  # El nombre del instructor
+    nombre_programa: Optional[str]
 
     class Config:
         from_attributes = True

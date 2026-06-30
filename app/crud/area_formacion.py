@@ -58,11 +58,16 @@ def get_all_areas(db: Session):
             a.id_area,
             a.nombre_area,
             a.objeto,
-            a.descripcion
+            a.descripcion,
+            pro.nombre_programa
         FROM instructor i
         LEFT JOIN area_formacion a 
-            ON i.id_area = a.id_area
-        ORDER BY i.id_instructor
+        ON i.id_area = a.id_area
+        LEFT JOIN instructor_programa p
+        ON i.id_instructor = p.id_instructor
+        LEFT JOIN programa_formacion pro 
+        ON	p.id_programa = pro.id_programa
+        ORDER BY i.id_instructor;
     """)
 
     return db.execute(query).mappings().all()
