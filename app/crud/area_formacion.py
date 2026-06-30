@@ -59,7 +59,8 @@ def get_all_areas(db: Session):
             a.nombre_area,
             a.objeto,
             a.descripcion,
-            pro.nombre_programa
+            pro.nombre_programa,
+            su.nombre as nombre_supervisor
         FROM instructor i
         LEFT JOIN area_formacion a 
         ON i.id_area = a.id_area
@@ -67,6 +68,8 @@ def get_all_areas(db: Session):
         ON i.id_instructor = p.id_instructor
         LEFT JOIN programa_formacion pro 
         ON	p.id_programa = pro.id_programa
+        LEFT JOIN supervisor su
+        ON su.id_supervisor = i.id_supervisor
         ORDER BY i.id_instructor;
     """)
 
