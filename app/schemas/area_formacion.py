@@ -6,8 +6,8 @@ from typing import Optional
 # BASE
 # =====================================
 class AreaFormacionBase(BaseModel):
-    id_area: int
-    nombre_area: Optional[str] = Field(..., max_length=150)
+    id_area: Optional[int] = None  # Cambiado a Optional
+    nombre_area: Optional[str] = Field(default=None, max_length=150)
     objeto: Optional[str] = Field(default=None)
     descripcion: Optional[str] = None
 
@@ -16,7 +16,9 @@ class AreaFormacionBase(BaseModel):
 # CREAR
 # =====================================
 class AreaFormacionCreate(AreaFormacionBase):
-    pass
+    # Cuando creas un área, el id_area es obligatorio
+    id_area: int
+    nombre_area: str = Field(..., max_length=150)
 
 
 # =====================================
@@ -32,7 +34,9 @@ class AreaFormacionUpdate(BaseModel):
 # RESPUESTA SIMPLE
 # =====================================
 class AreaFormacionOut(AreaFormacionBase):
-    id_area: int
+    id_area: Optional[int] = None  # Cambiado a Optional
+    id_instructor: int
+    nombre: str  # El nombre del instructor
 
     class Config:
         from_attributes = True
@@ -42,12 +46,12 @@ class AreaFormacionOut(AreaFormacionBase):
 # RESPUESTA CON PROGRAMA
 # =====================================
 class AreaFormacionWithPrograma(BaseModel):
-    id_area: int
+    id_area: Optional[int] = None  # Cambiado a Optional
     id_programa: int
     nombre_programa: str
-    nombre_area: str
-    objeto: Optional[str]
-    descripcion: Optional[str]
+    nombre_area: Optional[str] = None
+    objeto: Optional[str] = None
+    descripcion: Optional[str] = None
 
     class Config:
         from_attributes = True

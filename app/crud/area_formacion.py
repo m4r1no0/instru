@@ -52,7 +52,17 @@ def get_area_by_id(db: Session, id_area: int):
 # =====================================
 def get_all_areas(db: Session):
     query = text("""
-        SELECT * FROM area_formacion
+        SELECT 
+            i.id_instructor, 
+            CONCAT(i.nombres, ' ', i.apellidos) AS nombre,
+            a.id_area,
+            a.nombre_area,
+            a.objeto,
+            a.descripcion
+        FROM instructor i
+        LEFT JOIN area_formacion a 
+            ON i.id_area = a.id_area
+        ORDER BY i.id_instructor
     """)
 
     return db.execute(query).mappings().all()
